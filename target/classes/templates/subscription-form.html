@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${subscription.id != null ? 'Edit Subscription' : 'Add New Subscription'} + ' - ' + ${client.name}">Subscription Form</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css" rel="stylesheet">
+</head>
+<body>
+    <!-- 导航栏 -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container">
+            <a class="navbar-brand" th:href="@{/clients}">
+                <i class="bi bi-building"></i> PB Client Reporting
+            </a>
+        </div>
+    </nav>
+
+    <div class="container mt-4">
+        <!-- Page Title -->
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <div>
+                <h1>
+                    <i class="bi bi-plus-circle" th:if="${subscription.id == null}"></i>
+                    <i class="bi bi-pencil-square" th:if="${subscription.id != null}"></i>
+                    <span th:text="${subscription.id != null ? 'Edit Subscription' : 'Add New Subscription'}">Add New Subscription</span>
+                </h1>
+                <p class="text-muted">
+                    Client: <span th:text="${client.name}" class="fw-bold">Client Name</span>
+                </p>
+            </div>
+            <a th:href="@{/clients/{id}(id=${client.id})}" class="btn btn-outline-secondary">
+                <i class="bi bi-arrow-left"></i> Back to Client Details
+            </a>
+        </div>
+
+        <!-- Subscription Form -->
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="card">
+                    <div class="card-body">
+                        <form th:action="${subscription.id != null ? '/clients/' + client.id + '/subscriptions/' + subscription.id : '/clients/' + client.id + '/subscriptions'}" 
+                              th:object="${subscription}" method="post">
+                            
+                            <!-- Report Type -->
+                            <div class="mb-3">
+                                <label for="reportType" class="form-label">
+                                    <i class="bi bi-file-earmark-text"></i> Report Type <span class="text-danger">*</span>
+                                </label>
+                                <select class="form-select" id="reportType" th:field="*{reportType}" required>
+                                    <option value="">Please select report type</option>
+                                    <option th:each="type : ${reportTypes}" 
+                                            th:value="${type}" 
+                                            th:text="${type.description}">Report Type</option>
+                                </select>
+                                <div class="invalid-feedback" th:if="${#fields.hasErrors('reportType')}" 
+                                     th:errors="*{reportType}">Please select report type</div>
+                            </div>
+
+                            <!-- Frequency -->
+                            <div class="mb-3">
+                                <label for="frequency" class="form-label">
+                                    <i class="bi bi-clock"></i> Frequency <span class="text-danger">*</span>
+                                </label>
+                                <select class="form-select" id="frequency" th:field="*{frequency}" required>
+                                    <option value="">Please select frequency</option>
+                                    <option th:each="freq : ${frequencies}" 
+                                            th:value="${freq}" 
+                                            th:text="${freq.description}">Frequency</option>
+                                </select>
+                                <div class="invalid-feedback" th:if="${#fields.hasErrors('frequency')}" 
+                                     th:errors="*{frequency}">Please select frequency</div>
+                            </div>
+
+                            <!-- Format -->
+                            <div class="mb-3">
+                                <label for="format" class="form-label">
+                                    <i class="bi bi-file-earmark"></i> Format <span class="text-danger">*</span>
+                                </label>
+                                <select class="form-select" id="format" th:field="*{format}" required>
+                                    <option value="">Please select format</option>
+                                    <option th:each="fmt : ${formats}" 
+                                            th:value="${fmt}" 
+                                            th:text="${fmt.description}">Format</option>
+                                </select>
+                                <div class="invalid-feedback" th:if="${#fields.hasErrors('format')}" 
+                                     th:errors="*{format}">Please select format</div>
+                            </div>
+
+                            <!-- Delivery Methods -->
+                            <div class="mb-3">
+                                <label class="form-label">
+                                    <i class="bi bi-send"></i> Delivery Methods <span class="text-danger">*</span>
+                                </label>
+                                <div class="row">
+                                    <div th:each="method : ${deliveryMethods}" class="col-md-4">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" 
+                                                   th:id="'delivery_' + ${method}" 
+                                                   th:value="${method}" 
+                                                   name="deliveryMethods"
+                                                   th:checked="${subscription.deliveryMethods != null and subscription.deliveryMethods.contains(method)}">
+                                            <label class="form-check-label" th:for="'delivery_' + ${method}" 
+                                                   th:text="${method.description}">Delivery Method</label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-text">Please select at least one delivery method</div>
+                            </div>
+
+                            <!-- Override Email -->
+                            <div class="mb-3">
+                                <label for="overrideEmail" class="form-label">
+                                    <i class="bi bi-envelope-at"></i> Override Email
+                                </label>
+                                <input type="email" class="form-control" id="overrideEmail" 
+                                       th:field="*{overrideEmail}" 
+                                       placeholder="Optional: Override client default email">
+                                <div class="form-text">If set, this email will be used instead of the client's default email</div>
+                            </div>
+
+                            <!-- Override FTP Path -->
+                            <div class="mb-3">
+                                <label for="overrideFtpPath" class="form-label">
+                                    <i class="bi bi-folder2-open"></i> Override FTP Path
+                                </label>
+                                <input type="text" class="form-control" id="overrideFtpPath" 
+                                       th:field="*{overrideFtpPath}" 
+                                       placeholder="Optional: Override client default FTP path">
+                                <div class="form-text">If set, this path will be used instead of the client's default FTP path</div>
+                            </div>
+
+                            <!-- Status -->
+                            <div class="mb-3">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="active" th:field="*{active}">
+                                    <label class="form-check-label" for="active">
+                                        <i class="bi bi-toggle-on"></i> Activate Subscription
+                                    </label>
+                                </div>
+                                <div class="form-text">Uncheck to deactivate this subscription</div>
+                            </div>
+
+                            <!-- Button Group -->
+                            <div class="d-flex justify-content-end gap-2">
+                                <a th:href="@{/clients/{id}(id=${client.id})}" class="btn btn-outline-secondary">
+                                    <i class="bi bi-x-circle"></i> Cancel
+                                </a>
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="bi bi-check-circle"></i>
+                                    <span th:text="${subscription.id != null ? 'Update Subscription' : 'Create Subscription'}">Create Subscription</span>
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Form validation
+        (function() {
+            'use strict';
+            window.addEventListener('load', function() {
+                var forms = document.getElementsByTagName('form');
+                var validation = Array.prototype.filter.call(forms, function(form) {
+                    form.addEventListener('submit', function(event) {
+                        // Check if at least one delivery method is selected
+                        var deliveryMethods = form.querySelectorAll('input[name="deliveryMethods"]:checked');
+                        if (deliveryMethods.length === 0) {
+                            event.preventDefault();
+                            event.stopPropagation();
+                            alert('Please select at least one delivery method');
+                            return false;
+                        }
+                        
+                        if (form.checkValidity() === false) {
+                            event.preventDefault();
+                            event.stopPropagation();
+                        }
+                        form.classList.add('was-validated');
+                    }, false);
+                });
+            }, false);
+        })();
+    </script>
+</body>
+</html>

@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Client Management - PB Client Reporting Subscription System</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container">
+            <a class="navbar-brand" th:href="@{/clients}">
+                <i class="bi bi-building"></i> PB Client Reporting
+            </a>
+            <div class="navbar-nav ms-auto">
+                <a class="nav-link" th:href="@{/swagger-ui/index.html}" target="_blank">
+                    <i class="bi bi-book"></i> API Documentation
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-4">
+        <!-- Page Title and Action Buttons -->
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <div>
+                <h1><i class="bi bi-people"></i> Client Management</h1>
+                <p class="text-muted">Manage all PB clients and their report subscriptions</p>
+            </div>
+            <a th:href="@{/clients/new}" class="btn btn-primary">
+                <i class="bi bi-plus-circle"></i> Add New Client
+            </a>
+        </div>
+
+        <!-- Search Box -->
+        <div class="row mb-4">
+            <div class="col-md-6">
+                <form th:action="@{/clients/search}" method="get" class="d-flex">
+                    <input type="text" name="name" class="form-control me-2" 
+                           placeholder="Search client name..." th:value="${searchTerm}">
+                    <button type="submit" class="btn btn-outline-primary">
+                        <i class="bi bi-search"></i> Search
+                    </button>
+                </form>
+            </div>
+            <div class="col-md-6 text-end">
+                <span class="badge bg-info fs-6">
+                    Total: <span th:text="${totalClients}">0</span> clients
+                </span>
+            </div>
+        </div>
+
+        <!-- Client List -->
+        <div class="card">
+            <div class="card-body">
+                <div th:if="${#lists.isEmpty(clients)}" class="text-center py-5">
+                    <i class="bi bi-people text-muted" style="font-size: 3rem;"></i>
+                    <h4 class="text-muted mt-3">No client data available</h4>
+                    <p class="text-muted">Click the "Add New Client" button above to start adding clients</p>
+                </div>
+                
+                <div th:if="${!#lists.isEmpty(clients)}" class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Client Name</th>
+                                <th>Primary Contact Email</th>
+                                <th>FTP Path</th>
+                                <th>Subscriptions</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="client : ${clients}">
+                                <td th:text="${client.id}">1</td>
+                                <td>
+                                    <a th:href="@{/clients/{id}(id=${client.id})}" 
+                                       class="text-decoration-none fw-bold" 
+                                       th:text="${client.name}">客户名称</a>
+                                </td>
+                                <td th:text="${client.primaryContactEmail}">email@example.com</td>
+                                <td>
+                                    <span th:if="${client.ftpPath}" th:text="${client.ftpPath}">/ftp/path</span>
+                                    <span th:unless="${client.ftpPath}" class="text-muted">Not set</span>
+                                </td>
+                                <td>
+                                    <span class="badge bg-secondary" th:text="${#lists.size(client.subscriptions)}">0</span>
+                                </td>
+                                <td>
+                                    <div class="btn-group btn-group-sm">
+                                        <a th:href="@{/clients/{id}(id=${client.id})}" 
+                                           class="btn btn-outline-primary" title="View Details">
+                                            <i class="bi bi-eye"></i>
+                                        </a>
+                                        <a th:href="@{/clients/{id}/edit(id=${client.id})}" 
+                                           class="btn btn-outline-secondary" title="Edit">
+                                            <i class="bi bi-pencil"></i>
+                                        </a>
+                                        <form th:action="@{/clients/{id}/delete(id=${client.id})}" 
+                                              method="post" class="d-inline"
+                                              onsubmit="return confirm('Are you sure you want to delete this client? This will also delete all subscriptions for this client.')">
+                                            <button type="submit" class="btn btn-outline-danger" title="Delete">
+                                                <i class="bi bi-trash"></i>
+                                            </button>
+                                        </form>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

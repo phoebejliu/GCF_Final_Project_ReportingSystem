@@ -1,0 +1,26 @@
+spring:
+  datasource:
+    url: jdbc:h2:mem:pbsub;DB_CLOSE_DELAY=-1;MODE=LEGACY
+    driverClassName: org.h2.Driver
+    username: sa
+    password:
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate.format_sql: true
+  thymeleaf:
+    cache: false
+
+# 访问 H2 控制台: http://localhost:8080/h2-console
+spring.h2.console.enabled: true
+spring.h2.console.path: /h2-console
+
+# Swagger UI 配置
+springdoc:
+  api-docs:
+    path: /api-docs
+  swagger-ui:
+    path: /swagger-ui.html
+
