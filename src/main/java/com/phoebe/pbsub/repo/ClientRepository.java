@@ -10,13 +10,12 @@ import java.util.List;
 
 /**
  * Simplified Client Repository - Beginner Friendly
- * 简化的客户数据访问层 - 初学者友好版本
  * 
- * 这个接口展示了Spring Data JPA的基本用法：
- * 1. 继承JpaRepository - 自动获得基本的CRUD操作
- * 2. 方法命名约定 - Spring会根据方法名自动生成查询
- * 3. @Query注解 - 可以自定义复杂的查询语句
- * 4. 泛型参数 - <Client, Long> 表示实体类型和主键类型
+ * This interface demonstrates the basic usage of Spring Data JPA:
+ * 1. Extends JpaRepository - automatically provides basic CRUD operations
+ * 2. Method naming conventions - Spring generates queries based on method names
+ * 3. @Query annotation - allows custom complex query statements
+ * 4. Generic parameters - <Client, Long> represents entity type and primary key type
  */
 @Repository
 public interface ClientRepository extends JpaRepository<Client, Long> {
@@ -30,6 +29,6 @@ public interface ClientRepository extends JpaRepository<Client, Long> {
      * Find client with subscriptions by ID
      */
     @Query("SELECT c FROM Client c LEFT JOIN FETCH c.subscriptions WHERE c.id = :clientId")
-    Client findByIdWithSubscriptions(@Param("clientId") Long clientId);
+    java.util.Optional<Client> findByIdWithSubscriptions(@Param("clientId") Long clientId);
 }
 

@@ -12,7 +12,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 /**
  * Simplified Subscription Controller - Beginner Friendly
- * 简化的订阅控制器 - 初学者友好版本
  */
 @Controller
 @RequestMapping("/clients/{clientId}/subscriptions")
@@ -28,7 +27,6 @@ public class SubscriptionController {
     
     /**
      * Show new subscription form
-     * 显示新建订阅表单
      */
     @GetMapping("/new")
     public String showNewSubscriptionForm(@PathVariable Long clientId, Model model) {
@@ -43,7 +41,6 @@ public class SubscriptionController {
     
     /**
      * Create new subscription
-     * 创建新订阅
      */
     @PostMapping
     public String createSubscription(@PathVariable Long clientId, 
@@ -64,7 +61,6 @@ public class SubscriptionController {
     
     /**
      * Show edit subscription form
-     * 显示编辑订阅表单
      */
     @GetMapping("/{id}/edit")
     public String showEditSubscriptionForm(@PathVariable Long clientId, 
@@ -80,7 +76,6 @@ public class SubscriptionController {
     
     /**
      * Update subscription
-     * 更新订阅
      */
     @PostMapping("/{id}")
     public String updateSubscription(@PathVariable Long clientId, 
@@ -103,7 +98,6 @@ public class SubscriptionController {
     
     /**
      * Delete subscription
-     * 删除订阅
      */
     @PostMapping("/{id}/delete")
     public String deleteSubscription(@PathVariable Long clientId, 

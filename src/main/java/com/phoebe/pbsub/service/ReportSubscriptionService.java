@@ -9,13 +9,12 @@ import java.util.List;
 
 /**
  * Simplified Report Subscription Service - Beginner Friendly
- * 简化的报告订阅服务层 - 初学者友好版本
  * 
- * 这个类展示了Spring Boot中Service层的核心概念：
- * 1. 业务逻辑封装 - 将复杂的业务规则封装在Service层
- * 2. 事务管理 - 使用@Transactional确保数据一致性
- * 3. 异常处理 - 提供友好的错误信息
- * 4. 数据验证 - 在保存前进行业务规则检查
+ * This class demonstrates the core concepts of Service layer in Spring Boot:
+ * 1. Business logic encapsulation - encapsulate complex business rules in Service layer
+ * 2. Transaction management - use @Transactional to ensure data consistency
+ * 3. Exception handling - provide friendly error messages
+ * 4. Data validation - perform business rule checks before saving
  */
 @Service
 @Transactional
@@ -28,7 +27,14 @@ public class ReportSubscriptionService {
     }
     
     /**
-     * 根据客户ID查找所有订阅
+     * Find all subscriptions
+     */
+    @Transactional(readOnly = true)
+    public List<ReportSubscription> findAll() {
+        return subscriptionRepository.findAll();
+    }
+    
+    /**
      * Find all subscriptions by client ID
      */
     @Transactional(readOnly = true)
@@ -38,7 +44,6 @@ public class ReportSubscriptionService {
     
     
     /**
-     * 根据ID查找订阅
      * Find subscription by ID
      */
     @Transactional(readOnly = true)
@@ -48,7 +53,6 @@ public class ReportSubscriptionService {
     }
     
     /**
-     * 保存订阅
      * Save subscription
      */
     public ReportSubscription save(ReportSubscription subscription) {
@@ -56,7 +60,6 @@ public class ReportSubscriptionService {
     }
     
     /**
-     * 删除订阅
      * Delete subscription
      */
     public void delete(Long id) {

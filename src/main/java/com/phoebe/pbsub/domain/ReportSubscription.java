@@ -6,7 +6,6 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 
 /**
  * Simplified Report Subscription Entity - Beginner Friendly
- * 简化的报告订阅实体 - 初学者友好版本
  */
 @Entity
 @Table(name = "report_subscriptions")
@@ -16,34 +15,34 @@ public class ReportSubscription {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    // 关联到客户 - 多对一关系
+    // Associated with client - many-to-one relationship
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @JoinColumn(name = "client_id", nullable = false)
     @JsonBackReference
     private Client client;
 
-    // 报告类型 - 简单字符串，不使用复杂枚举
+    // Report type - simple string, not using complex enums
     @NotBlank(message = "Report type cannot be empty")
     @Column(name = "report_type", nullable = false)
     private String reportType;
 
-    // 频率 - 简单字符串
+    // Frequency - simple string
     @NotBlank(message = "Frequency cannot be empty")
     @Column(nullable = false)
     private String frequency;
 
-    // 格式 - 简单字符串
+    // Format - simple string
     @NotBlank(message = "Format cannot be empty")
     @Column(nullable = false)
     private String format;
 
-    // 发送方式 - 简化为单个字符串
+    // Delivery method - simplified to single string
     @NotBlank(message = "Delivery method cannot be empty")
     @Column(name = "delivery_method", nullable = false)
     private String deliveryMethod;
 
 
-    // 构造函数 - 初学者友好的简单构造函数
+    // Constructors - beginner-friendly simple constructors
     public ReportSubscription() {}
 
     public ReportSubscription(Client client, String reportType, String frequency, 
@@ -55,7 +54,7 @@ public class ReportSubscription {
         this.deliveryMethod = deliveryMethod;
     }
 
-    // Getter和Setter方法 - 标准的Java Bean模式
+    // Getter and Setter methods - standard Java Bean pattern
     public Long getId() {
         return id;
     }
@@ -105,7 +104,7 @@ public class ReportSubscription {
     }
 
 
-    // 简单的toString方法 - 用于调试
+    // Simple toString method - for debugging
     @Override
     public String toString() {
         return "ReportSubscription{" +

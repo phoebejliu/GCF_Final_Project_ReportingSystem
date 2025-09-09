@@ -10,7 +10,6 @@ import java.util.List;
 
 /**
  * Simplified Client Entity - Beginner Friendly
- * 简化的客户实体 - 初学者友好版本
  */
 @Entity
 @Table(name = "clients")
@@ -20,12 +19,12 @@ public class Client {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    // 客户名称 - 必填字段
+    // Client name - required field
     @NotBlank(message = "Client name cannot be empty")
     @Column(nullable = false)
     private String name;
 
-    // 联系邮箱 - 可选字段，但如果有值必须是有效邮箱格式
+    // Contact email - optional field, but if provided must be valid email format
     @Email(message = "Invalid email format")
     @Column(name = "email")
     private String email;
@@ -34,7 +33,7 @@ public class Client {
     @JsonManagedReference
     private List<ReportSubscription> subscriptions = new ArrayList<>();
 
-    // 构造函数 - 初学者友好的简单构造函数
+    // Constructors - beginner-friendly simple constructors
     public Client() {}
 
     public Client(String name, String email) {
@@ -42,7 +41,7 @@ public class Client {
         this.email = email;
     }
 
-    // Getter和Setter方法 - 标准的Java Bean模式
+    // Getter and Setter methods - standard Java Bean pattern
     public Long getId() {
         return id;
     }
@@ -86,7 +85,7 @@ public class Client {
         subscription.setClient(null);
     }
 
-    // 简单的toString方法 - 用于调试
+    // Simple toString method - for debugging
     @Override
     public String toString() {
         return "Client{" +

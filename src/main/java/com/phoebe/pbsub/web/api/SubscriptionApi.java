@@ -11,7 +11,6 @@ import java.util.List;
 
 /**
  * Subscription REST API - Beginner Friendly Version
- * 订阅REST API - 初学者友好版本
  */
 @RestController
 @RequestMapping("/api/subscriptions")
@@ -24,8 +23,16 @@ public class SubscriptionApi {
     }
     
     /**
+     * Get all subscriptions
+     */
+    @GetMapping
+    public ResponseEntity<List<ReportSubscription>> getAllSubscriptions() {
+        List<ReportSubscription> subscriptions = subscriptionService.findAll();
+        return ResponseEntity.ok(subscriptions);
+    }
+    
+    /**
      * Get subscriptions by client ID
-     * 根据客户ID获取订阅
      */
     @GetMapping("/client/{clientId}")
     public ResponseEntity<List<ReportSubscription>> getSubscriptionsByClient(
@@ -36,7 +43,6 @@ public class SubscriptionApi {
     
     /**
      * Get subscription by ID
-     * 根据ID获取订阅
      */
     @GetMapping("/{id}")
     public ResponseEntity<ReportSubscription> getSubscription(
@@ -48,7 +54,6 @@ public class SubscriptionApi {
     
     /**
      * Create new subscription
-     * 创建新订阅
      */
     @PostMapping
     public ResponseEntity<ReportSubscription> createSubscription(
@@ -59,7 +64,6 @@ public class SubscriptionApi {
     
     /**
      * Update subscription
-     * 更新订阅
      */
     @PutMapping("/{id}")
     public ResponseEntity<ReportSubscription> updateSubscription(
@@ -72,7 +76,6 @@ public class SubscriptionApi {
     
     /**
      * Delete subscription
-     * 删除订阅
      */
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteSubscription(

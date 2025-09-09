@@ -7,7 +7,6 @@ import org.springframework.context.annotation.Configuration;
 
 /**
  * OpenAPI (Swagger) Configuration
- * OpenAPI (Swagger) 配置
  */
 @Configuration
 public class OpenApiConfig {
@@ -17,7 +16,7 @@ public class OpenApiConfig {
         return new OpenAPI()
                 .info(new Info()
                         .title("PB Client Reporting Subscription API")
-                        .description("PB客户报告订阅系统API文档 - 包含客户管理和订阅管理的完整CRUD操作")
+                        .description("PB Client Report Subscription System API Documentation - Complete CRUD operations for client and subscription management")
                         .version("1.0.0"));
     }
 }

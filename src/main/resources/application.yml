@@ -13,11 +13,11 @@ spring:
   thymeleaf:
     cache: false
 
-# 访问 H2 控制台: http://localhost:8080/h2-console
+# Access H2 Console: http://localhost:8080/h2-console
 spring.h2.console.enabled: true
 spring.h2.console.path: /h2-console
 
-# Swagger UI 配置 - 使用默认路径
+# Swagger UI Configuration - using default paths
 springdoc:
   api-docs:
     enabled: true

@@ -9,13 +9,12 @@ import java.util.List;
 
 /**
  * Simplified Client Service - Beginner Friendly
- * 简化的客户服务层 - 初学者友好版本
  * 
- * 这个类展示了Spring Boot中Service层的基本用法：
- * 1. @Service注解 - 告诉Spring这是一个服务组件
- * 2. @Transactional注解 - 自动管理数据库事务
- * 3. 依赖注入 - 通过构造函数注入Repository
- * 4. 基本的CRUD操作 - 创建、读取、更新、删除
+ * This class demonstrates the basic usage of Service layer in Spring Boot:
+ * 1. @Service annotation - tells Spring this is a service component
+ * 2. @Transactional annotation - automatically manages database transactions
+ * 3. Dependency injection - inject Repository through constructor
+ * 4. Basic CRUD operations - Create, Read, Update, Delete
  */
 @Service
 @Transactional

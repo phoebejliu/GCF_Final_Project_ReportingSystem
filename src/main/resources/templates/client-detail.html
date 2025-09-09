@@ -4,354 +4,280 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title th:text="${client.name} + ' - Client Details'">Client Details</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css" rel="stylesheet">
     <style>
-        /* 红色主题配色方案 - 初学者友好 */
-        :root {
-            --primary-red: #dc3545;
-            --light-red: #f8d7da;
-            --dark-red: #721c24;
-            --accent-red: #e74c3c;
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f5f5;
         }
-        
-        .navbar-brand {
-            font-weight: bold;
-            color: white !important;
+        .header {
+            background-color: #333;
+            color: white;
+            padding: 10px 20px;
         }
-        
-        /* 红色主题导航栏 */
-        .navbar-dark.bg-primary {
-            background-color: var(--primary-red) !important;
+        .header h1 {
+            margin: 0;
+            font-size: 24px;
         }
-        
-        /* 红色主题按钮 */
-        .btn-primary {
-            background-color: var(--primary-red);
-            border-color: var(--primary-red);
+        .nav {
+            background-color: #444;
+            padding: 10px 20px;
         }
-        
-        .btn-primary:hover {
-            background-color: var(--dark-red);
-            border-color: var(--dark-red);
+        .nav a {
+            color: white;
+            text-decoration: none;
+            margin-right: 20px;
         }
-        
-        .btn-outline-primary {
-            color: var(--primary-red);
-            border-color: var(--primary-red);
+        .nav a:hover {
+            text-decoration: underline;
         }
-        
-        .btn-outline-primary:hover {
-            background-color: var(--primary-red);
-            border-color: var(--primary-red);
+        .container {
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 0 20px;
         }
-        
-        /* 红色主题卡片 */
-        .card {
-            box-shadow: 0 0.125rem 0.25rem rgba(220, 53, 69, 0.15);
-            border-left: 4px solid var(--primary-red);
+        .footer {
+            background-color: #333;
+            color: white;
+            text-align: center;
+            padding: 20px;
+            margin-top: 50px;
         }
-        
-        .card-header {
-            background-color: var(--light-red);
-            border-bottom: 1px solid var(--primary-red);
+        .alert {
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid;
         }
-        
-        /* 红色主题表格 */
-        .table th {
-            background-color: var(--light-red);
-            color: var(--dark-red);
-            border-color: var(--primary-red);
-        }
-        
-        .table-striped tbody tr:nth-of-type(odd) {
-            background-color: rgba(220, 53, 69, 0.05);
-        }
-        
-        /* 红色主题徽章 */
-        .badge {
-            font-size: 0.75em;
-        }
-        
-        .badge.bg-success {
-            background-color: var(--primary-red) !important;
-        }
-        
-        .badge.bg-secondary {
-            background-color: var(--dark-red) !important;
-        }
-        
-        /* 红色主题警告框 */
         .alert-success {
-            background-color: var(--light-red);
-            border-color: var(--primary-red);
-            color: var(--dark-red);
+            background-color: #d4edda;
+            border-color: #c3e6cb;
+            color: #155724;
         }
-        
-        /* 红色主题页脚 */
-        .bg-light {
-            background-color: var(--light-red) !important;
+        .alert-danger {
+            background-color: #f8d7da;
+            border-color: #f5c6cb;
+            color: #721c24;
         }
-        
-        /* 红色主题链接 */
-        a {
-            color: var(--primary-red);
+        .page-title {
+            background-color: white;
+            padding: 20px;
+            margin-bottom: 20px;
+            border: 1px solid #ddd;
         }
-        
-        a:hover {
-            color: var(--dark-red);
+        .page-title h2 {
+            margin: 0 0 10px 0;
         }
-        
-        /* 红色主题表单控件 */
-        .form-control:focus {
-            border-color: var(--primary-red);
-            box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25);
+        .btn {
+            padding: 8px 16px;
+            margin: 5px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 14px;
+            border: none;
+            cursor: pointer;
         }
-        
-        /* 红色主题分页 */
-        .page-link {
-            color: var(--primary-red);
+        .btn-back {
+            background-color: #6c757d;
+            color: white;
         }
-        
-        .page-link:hover {
-            color: var(--dark-red);
-            background-color: var(--light-red);
+        .btn-edit {
+            background-color: #ffc107;
+            color: black;
         }
-        
-        .page-item.active .page-link {
-            background-color: var(--primary-red);
-            border-color: var(--primary-red);
+        .btn-add {
+            background-color: #007bff;
+            color: white;
+        }
+        .btn:hover {
+            opacity: 0.8;
+        }
+        .info-section {
+            background-color: white;
+            padding: 20px;
+            margin-bottom: 20px;
+            border: 1px solid #ddd;
+        }
+        .info-section h3 {
+            margin: 0 0 15px 0;
+        }
+        .info-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .info-table td {
+            padding: 8px 0;
+            border-bottom: 1px solid #eee;
+        }
+        .info-table td:first-child {
+            font-weight: bold;
+            width: 150px;
+        }
+        .subscriptions-section {
+            background-color: white;
+            padding: 20px;
+            border: 1px solid #ddd;
+        }
+        .subscriptions-section h3 {
+            margin: 0 0 15px 0;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        th {
+            background-color: #f8f9fa;
+            font-weight: bold;
+        }
+        tr:hover {
+            background-color: #f5f5f5;
+        }
+        .btn-small {
+            padding: 4px 8px;
+            margin: 2px;
+            font-size: 12px;
+        }
+        .btn-edit-small {
+            background-color: #ffc107;
+            color: black;
+        }
+        .btn-delete {
+            background-color: #dc3545;
+            color: white;
+        }
+        .no-data {
+            text-align: center;
+            padding: 40px;
+            color: #666;
         }
     </style>
 </head>
 <body>
-    <!-- 导航栏 -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
-        <div class="container">
-            <a class="navbar-brand" th:href="@{/clients}">
-                <i class="bi bi-building"></i> PB Client Reporting
-            </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav me-auto">
-                    <li class="nav-item">
-                        <a class="nav-link" th:href="@{/clients}">
-                            <i class="bi bi-people"></i> Client Management
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" th:href="@{/swagger-ui.html}" target="_blank">
-                            <i class="bi bi-book"></i> API Documentation
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" th:href="@{/h2-console}" target="_blank">
-                            <i class="bi bi-database"></i> Database Console
-                        </a>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </nav>
+    <!-- Page Header -->
+    <div class="header">
+        <h1>PB Client Report Subscription System</h1>
+    </div>
+    
+    <!-- Navigation -->
+    <div class="nav">
+        <a th:href="@{/clients}">Client Management</a>
+        <a th:href="@{/swagger-ui.html}" target="_blank">API Documentation</a>
+        <a th:href="@{/h2-console}" target="_blank">Database Console</a>
+    </div>
 
-    <!-- 主要内容 -->
-    <div class="container mt-4">
-        <!-- 消息提示 -->
-        <div th:if="${successMessage}" class="alert alert-success alert-dismissible fade show" role="alert">
-            <i class="bi bi-check-circle"></i>
+    <!-- Main Content -->
+    <div class="container">
+        <!-- Message Alerts -->
+        <div th:if="${successMessage}" class="alert alert-success">
             <span th:text="${successMessage}"></span>
-            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
         </div>
         
-        <div th:if="${errorMessage}" class="alert alert-danger alert-dismissible fade show" role="alert">
-            <i class="bi bi-exclamation-triangle"></i>
+        <div th:if="${errorMessage}" class="alert alert-danger">
             <span th:text="${errorMessage}"></span>
-            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
         </div>
 
-        <!-- 页面标题和操作按钮 -->
-        <div class="d-flex justify-content-between align-items-center mb-4">
-            <div>
-                <h1>
-                    <i class="bi bi-person-circle"></i>
-                    <span th:text="${client.name}">Client Name</span>
-                </h1>
-                <p class="text-muted">Client details and report subscriptions - Beginner Friendly</p>
-            </div>
-            <div>
-                <a th:href="@{/clients}" class="btn btn-outline-secondary">
-                    <i class="bi bi-arrow-left"></i> Back to Clients
-                </a>
-                <a th:href="@{/clients/{id}/edit(id=${client.id})}" class="btn btn-outline-primary">
-                    <i class="bi bi-pencil"></i> Edit Client
-                </a>
-                <a th:href="@{/clients/{id}/subscriptions/new(id=${client.id})}" class="btn btn-primary">
-                    <i class="bi bi-plus-circle"></i> Add Subscription
-                </a>
-            </div>
+        <!-- Page Title -->
+        <div class="page-title">
+            <h2 th:text="${client.name}">Client Name</h2>
+            <p>Client details and report subscriptions</p>
+            <a th:href="@{/clients}" class="btn btn-back">Back to Client List</a>
+            <a th:href="@{/clients/{id}/edit(id=${client.id})}" class="btn btn-edit">Edit Client</a>
+            <a th:href="@{/clients/{id}/subscriptions/new(id=${client.id})}" class="btn btn-add">Add Subscription</a>
         </div>
 
-        <!-- 客户信息 -->
-        <div class="row mb-4">
-            <div class="col-md-6">
-                <div class="card">
-                    <div class="card-header">
-                        <h5 class="mb-0"><i class="bi bi-info-circle"></i> Client Information</h5>
-                    </div>
-                    <div class="card-body">
-                        <table class="table table-borderless">
-                            <tr>
-                                <td><strong>Client ID:</strong></td>
-                                <td th:text="${client.id}">1</td>
-                            </tr>
-                            <tr>
-                                <td><strong>Name:</strong></td>
-                                <td th:text="${client.name}">Client Name</td>
-                            </tr>
-                            <tr>
-                                <td><strong>Email:</strong></td>
-                                <td th:text="${client.email}">email@example.com</td>
-                            </tr>
-                            <tr>
-                                <td><strong>Total Subscriptions:</strong></td>
-                                <td>
-                                    <span class="badge bg-success" th:text="${client.subscriptions.size()}">0</span>
-                                </td>
-                            </tr>
-                        </table>
-                    </div>
-                </div>
-            </div>
+        <!-- Client Information -->
+        <div class="info-section">
+            <h3>Client Information</h3>
+            <table class="info-table">
+                <tr>
+                    <td>Client ID:</td>
+                    <td th:text="${client.id}">1</td>
+                </tr>
+                <tr>
+                    <td>Name:</td>
+                    <td th:text="${client.name}">Client Name</td>
+                </tr>
+                <tr>
+                    <td>Email:</td>
+                    <td th:text="${client.email}">email@example.com</td>
+                </tr>
+                <tr>
+                    <td>Total Subscriptions:</td>
+                    <td th:text="${client.subscriptions.size()}">0</td>
+                </tr>
+            </table>
         </div>
 
-        <!-- 订阅列表 -->
-        <div class="card">
-            <div class="card-header">
-                <h5 class="mb-0"><i class="bi bi-list-ul"></i> Report Subscriptions</h5>
+        <!-- Subscription List -->
+        <div class="subscriptions-section">
+            <h3>Report Subscriptions</h3>
+            
+            <div th:if="${client.subscriptions.isEmpty()}" class="no-data">
+                <h4>No Subscriptions</h4>
+                <p>This client has no report subscriptions yet.</p>
+                <a th:href="@{/clients/{id}/subscriptions/new(id=${client.id})}" class="btn btn-add">Add First Subscription</a>
             </div>
-            <div class="card-body">
-                <div th:if="${client.subscriptions.isEmpty()}" class="text-center py-4">
-                    <i class="bi bi-inbox text-muted" style="font-size: 3rem;"></i>
-                    <h5 class="text-muted mt-3">No subscriptions found</h5>
-                    <p class="text-muted">This client doesn't have any report subscriptions yet.</p>
-                    <a th:href="@{/clients/{id}/subscriptions/new(id=${client.id})}" class="btn btn-primary">
-                        <i class="bi bi-plus-circle"></i> Add First Subscription
-                    </a>
-                </div>
-                
-                <div th:if="${!client.subscriptions.isEmpty()}">
-                    <div class="table-responsive">
-                        <table class="table table-striped table-hover">
-                            <thead>
-                                <tr>
-                                    <th>ID</th>
-                                    <th>Report Type</th>
-                                    <th>Frequency</th>
-                                    <th>Format</th>
-                                    <th>Delivery Method</th>
-                                    <th>Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr th:each="subscription : ${client.subscriptions}">
-                                    <td th:text="${subscription.id}">1</td>
-                                    <td th:text="${subscription.reportType}">Report Type</td>
-                                    <td th:text="${subscription.frequency}">Frequency</td>
-                                    <td th:text="${subscription.format}">Format</td>
-                                    <td th:text="${subscription.deliveryMethod}">Delivery Method</td>
-                                    <td>
-                                        <div class="btn-group" role="group">
-                                            <a th:href="@{/clients/{clientId}/subscriptions/{id}/edit(clientId=${client.id}, id=${subscription.id})}" 
-                                               class="btn btn-outline-primary btn-sm">
-                                                <i class="bi bi-pencil"></i> Edit
-                                            </a>
-                                            <button type="button" 
-                                                    class="btn btn-outline-danger btn-sm delete-btn"
-                                                    th:data-subscription-id="${subscription.id}"
-                                                    th:data-subscription-type="${subscription.reportType}">
-                                                <i class="bi bi-trash"></i> Delete
-                                            </button>
-                                        </div>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
+            
+            <div th:if="${!client.subscriptions.isEmpty()}">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Report Type</th>
+                            <th>Frequency</th>
+                            <th>Format</th>
+                            <th>Delivery Method</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="subscription : ${client.subscriptions}">
+                            <td th:text="${subscription.id}">1</td>
+                            <td th:text="${subscription.reportType}">Report Type</td>
+                            <td th:text="${subscription.frequency}">Frequency</td>
+                            <td th:text="${subscription.format}">Format</td>
+                            <td th:text="${subscription.deliveryMethod}">Delivery Method</td>
+                            <td>
+                                <a th:href="@{/clients/{clientId}/subscriptions/{id}/edit(clientId=${client.id}, id=${subscription.id})}" 
+                                   class="btn btn-small btn-edit-small">Edit</a>
+                                <button type="button" 
+                                        class="btn btn-small btn-delete"
+                                        th:data-subscription-id="${subscription.id}"
+                                        th:data-subscription-type="${subscription.reportType}"
+                                        onclick="confirmDelete(this)">Delete</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>
 
-    <!-- 删除确认对话框 -->
-    <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="deleteModalLabel">
-                        <i class="bi bi-exclamation-triangle text-warning"></i> 确认删除
-                    </h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <p>您确定要删除这个订阅吗？</p>
-                    <p><strong>订阅类型：</strong><span id="subscriptionType"></span></p>
-                    <p class="text-danger"><small>此操作无法撤销！</small></p>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-                        <i class="bi bi-x-circle"></i> 取消
-                    </button>
-                    <form id="deleteForm" method="post" style="display: inline;">
-                        <button type="submit" class="btn btn-danger">
-                            <i class="bi bi-trash"></i> 确认删除
-                        </button>
-                    </form>
-                </div>
-            </div>
-        </div>
+    <!-- Footer -->
+    <div class="footer">
+        <p>PB Client Report Subscription System - Beginner Version</p>
     </div>
 
-    <!-- JavaScript -->
+    <!-- Simple Delete Confirmation -->
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // 为所有删除按钮添加事件监听器
-            document.querySelectorAll('.delete-btn').forEach(function(button) {
-                button.addEventListener('click', function() {
-                    const subscriptionId = this.getAttribute('data-subscription-id');
-                    const subscriptionType = this.getAttribute('data-subscription-type');
-                    confirmDelete(subscriptionId, subscriptionType);
-                });
-            });
-        });
-
-        function confirmDelete(subscriptionId, subscriptionType) {
-            // 设置订阅类型显示
-            document.getElementById('subscriptionType').textContent = subscriptionType;
-            
-            // 设置删除表单的 action
-            const deleteForm = document.getElementById('deleteForm');
+        function confirmDelete(button) {
+            const subscriptionId = button.getAttribute('data-subscription-id');
+            const subscriptionType = button.getAttribute('data-subscription-type');
             const clientId = [[${client.id}]];
-            deleteForm.action = '/clients/' + clientId + '/subscriptions/' + subscriptionId + '/delete';
             
-            // 显示确认对话框
-            const deleteModal = new bootstrap.Modal(document.getElementById('deleteModal'));
-            deleteModal.show();
+            if (confirm('Are you sure you want to delete subscription "' + subscriptionType + '"?\n\nThis action cannot be undone!')) {
+                const form = document.createElement('form');
+                form.method = 'POST';
+                form.action = '/clients/' + clientId + '/subscriptions/' + subscriptionId + '/delete';
+                document.body.appendChild(form);
+                form.submit();
+            }
         }
     </script>
-
-    <!-- 页脚 -->
-    <footer class="bg-light mt-5 py-4">
-        <div class="container text-center">
-            <p class="text-muted mb-0">
-                <i class="bi bi-building"></i> 
-                PB Client Reporting Subscription System - 
-                <small>Beginner Friendly Version</small>
-            </p>
-        </div>
-    </footer>
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

@@ -12,7 +12,6 @@ import java.util.Map;
 
 /**
  * Client REST API - Beginner Friendly Version
- * 客户REST API - 初学者友好版本
  */
 @RestController
 @RequestMapping("/api/clients")
@@ -26,7 +25,6 @@ public class ClientApi {
     
     /**
      * Get all clients
-     * 获取所有客户
      */
     @GetMapping
     public ResponseEntity<List<Client>> getAllClients() {
@@ -36,7 +34,6 @@ public class ClientApi {
     
     /**
      * Get client by ID
-     * 根据ID获取客户
      */
     @GetMapping("/{id}")
     public ResponseEntity<Client> getClient(
@@ -47,7 +44,6 @@ public class ClientApi {
     
     /**
      * Get client with subscriptions by ID
-     * 根据ID获取客户及其订阅信息
      */
     @GetMapping("/{id}/with-subscriptions")
     public ResponseEntity<Client> getClientWithSubscriptions(
@@ -58,7 +54,6 @@ public class ClientApi {
     
     /**
      * Create new client
-     * 创建新客户
      */
     @PostMapping
     public ResponseEntity<Client> createClient(
@@ -69,7 +64,6 @@ public class ClientApi {
     
     /**
      * Update client information
-     * 更新客户信息
      */
     @PutMapping("/{id}")
     public ResponseEntity<Client> updateClient(
@@ -82,7 +76,6 @@ public class ClientApi {
     
     /**
      * Delete client
-     * 删除客户
      */
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteClient(
@@ -93,7 +86,6 @@ public class ClientApi {
     
     /**
      * Search clients
-     * 搜索客户
      */
     @GetMapping("/search")
     public ResponseEntity<List<Client>> searchClients(
@@ -104,7 +96,6 @@ public class ClientApi {
     
     /**
      * Get client statistics
-     * 获取客户统计信息
      */
     @GetMapping("/stats")
     public ResponseEntity<Map<String, Object>> getClientStats() {

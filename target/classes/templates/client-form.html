@@ -3,257 +3,215 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title th:text="${client.id != null ? 'Edit Client' : 'Add New Client'} + ' - PB Client Reporting Subscription System'">Client Form</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css" rel="stylesheet">
+    <title th:text="${client.id != null ? 'Edit Client' : 'Add New Client'} + ' - PB Client Report Subscription System'">Client Form</title>
     <style>
-        /* 红色主题配色方案 - 初学者友好 */
-        :root {
-            --primary-red: #dc3545;
-            --light-red: #f8d7da;
-            --dark-red: #721c24;
-            --accent-red: #e74c3c;
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f5f5;
         }
-        
-        .navbar-brand {
-            font-weight: bold;
-            color: white !important;
+        .header {
+            background-color: #333;
+            color: white;
+            padding: 10px 20px;
         }
-        
-        /* 红色主题导航栏 */
-        .navbar-dark.bg-primary {
-            background-color: var(--primary-red) !important;
+        .header h1 {
+            margin: 0;
+            font-size: 24px;
         }
-        
-        /* 红色主题按钮 */
-        .btn-primary {
-            background-color: var(--primary-red);
-            border-color: var(--primary-red);
+        .nav {
+            background-color: #444;
+            padding: 10px 20px;
         }
-        
-        .btn-primary:hover {
-            background-color: var(--dark-red);
-            border-color: var(--dark-red);
+        .nav a {
+            color: white;
+            text-decoration: none;
+            margin-right: 20px;
         }
-        
-        .btn-outline-primary {
-            color: var(--primary-red);
-            border-color: var(--primary-red);
+        .nav a:hover {
+            text-decoration: underline;
         }
-        
-        .btn-outline-primary:hover {
-            background-color: var(--primary-red);
-            border-color: var(--primary-red);
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 0 20px;
         }
-        
-        /* 红色主题卡片 */
-        .card {
-            box-shadow: 0 0.125rem 0.25rem rgba(220, 53, 69, 0.15);
-            border-left: 4px solid var(--primary-red);
+        .footer {
+            background-color: #333;
+            color: white;
+            text-align: center;
+            padding: 20px;
+            margin-top: 50px;
         }
-        
-        .card-header {
-            background-color: var(--light-red);
-            border-bottom: 1px solid var(--primary-red);
+        .alert {
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid;
         }
-        
-        /* 红色主题表格 */
-        .table th {
-            background-color: var(--light-red);
-            color: var(--dark-red);
-            border-color: var(--primary-red);
-        }
-        
-        .table-striped tbody tr:nth-of-type(odd) {
-            background-color: rgba(220, 53, 69, 0.05);
-        }
-        
-        /* 红色主题徽章 */
-        .badge {
-            font-size: 0.75em;
-        }
-        
-        .badge.bg-success {
-            background-color: var(--primary-red) !important;
-        }
-        
-        /* 红色主题警告框 */
         .alert-success {
-            background-color: var(--light-red);
-            border-color: var(--primary-red);
-            color: var(--dark-red);
+            background-color: #d4edda;
+            border-color: #c3e6cb;
+            color: #155724;
         }
-        
-        /* 红色主题页脚 */
-        .bg-light {
-            background-color: var(--light-red) !important;
+        .alert-danger {
+            background-color: #f8d7da;
+            border-color: #f5c6cb;
+            color: #721c24;
         }
-        
-        /* 红色主题链接 */
-        a {
-            color: var(--primary-red);
+        .page-title {
+            background-color: white;
+            padding: 20px;
+            margin-bottom: 20px;
+            border: 1px solid #ddd;
         }
-        
-        a:hover {
-            color: var(--dark-red);
+        .page-title h2 {
+            margin: 0 0 10px 0;
         }
-        
-        /* 红色主题表单控件 */
-        .form-control:focus {
-            border-color: var(--primary-red);
-            box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25);
+        .back-button {
+            background-color: #6c757d;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 14px;
         }
-        
-        /* 红色主题分页 */
-        .page-link {
-            color: var(--primary-red);
+        .back-button:hover {
+            background-color: #545b62;
+            color: white;
+            text-decoration: none;
         }
-        
-        .page-link:hover {
-            color: var(--dark-red);
-            background-color: var(--light-red);
+        .form-container {
+            background-color: white;
+            padding: 30px;
+            border: 1px solid #ddd;
         }
-        
-        .page-item.active .page-link {
-            background-color: var(--primary-red);
-            border-color: var(--primary-red);
+        .form-group {
+            margin-bottom: 20px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        .form-group input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+        .form-group input:focus {
+            outline: none;
+            border-color: #007bff;
+        }
+        .form-help {
+            font-size: 12px;
+            color: #666;
+            margin-top: 5px;
+        }
+        .form-actions {
+            margin-top: 30px;
+            text-align: right;
+        }
+        .btn {
+            padding: 10px 20px;
+            margin-left: 10px;
+            text-decoration: none;
+            border-radius: 4px;
+            border: none;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        .btn-cancel {
+            background-color: #6c757d;
+            color: white;
+        }
+        .btn-submit {
+            background-color: #007bff;
+            color: white;
+        }
+        .btn:hover {
+            opacity: 0.8;
+        }
+        .required {
+            color: red;
         }
     </style>
 </head>
 <body>
-    <!-- 导航栏 -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
-        <div class="container">
-            <a class="navbar-brand" th:href="@{/clients}">
-                <i class="bi bi-building"></i> PB Client Reporting
-            </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav me-auto">
-                    <li class="nav-item">
-                        <a class="nav-link" th:href="@{/clients}">
-                            <i class="bi bi-people"></i> Client Management
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" th:href="@{/swagger-ui.html}" target="_blank">
-                            <i class="bi bi-book"></i> API Documentation
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" th:href="@{/h2-console}" target="_blank">
-                            <i class="bi bi-database"></i> Database Console
-                        </a>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </nav>
+    <!-- Page Header -->
+    <div class="header">
+        <h1>PB Client Report Subscription System</h1>
+    </div>
+    
+    <!-- Navigation -->
+    <div class="nav">
+        <a th:href="@{/clients}">Client Management</a>
+        <a th:href="@{/swagger-ui.html}" target="_blank">API Documentation</a>
+        <a th:href="@{/h2-console}" target="_blank">Database Console</a>
+    </div>
 
-    <!-- 主要内容 -->
-    <div class="container mt-4">
-        <!-- 消息提示 -->
-        <div th:if="${successMessage}" class="alert alert-success alert-dismissible fade show" role="alert">
-            <i class="bi bi-check-circle"></i>
+    <!-- Main Content -->
+    <div class="container">
+        <!-- Message Alerts -->
+        <div th:if="${successMessage}" class="alert alert-success">
             <span th:text="${successMessage}"></span>
-            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
         </div>
         
-        <div th:if="${errorMessage}" class="alert alert-danger alert-dismissible fade show" role="alert">
-            <i class="bi bi-exclamation-triangle"></i>
+        <div th:if="${errorMessage}" class="alert alert-danger">
             <span th:text="${errorMessage}"></span>
-            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
         </div>
 
-        <!-- 页面标题 -->
-        <div class="d-flex justify-content-between align-items-center mb-4">
-            <div>
-                <h1>
-                    <i class="bi bi-person-plus" th:if="${client.id == null}"></i>
-                    <i class="bi bi-pencil" th:if="${client.id != null}"></i>
-                    <span th:text="${client.id != null ? 'Edit Client' : 'Add New Client'}">Client Form</span>
-                </h1>
-                <p class="text-muted">Create or update client information - Beginner Friendly</p>
-            </div>
-            <div>
-                <a th:href="@{/clients}" class="btn btn-outline-secondary">
-                    <i class="bi bi-arrow-left"></i> Back to Clients
-                </a>
-            </div>
+        <!-- Page Title -->
+        <div class="page-title">
+            <h2 th:text="${client.id != null ? 'Edit Client' : 'Add New Client'}">Client Form</h2>
+            <p>Create or update client information</p>
+            <a th:href="@{/clients}" class="back-button">Back to Client List</a>
         </div>
 
-        <!-- 客户表单 -->
-        <div class="row justify-content-center">
-            <div class="col-md-8">
-                <div class="card">
-                    <div class="card-header">
-                        <h5 class="mb-0">
-                            <i class="bi bi-person"></i> 
-                            <span th:text="${client.id != null ? 'Edit Client Information' : 'New Client Information'}">Client Information</span>
-                        </h5>
-                    </div>
-                    <div class="card-body">
-                        <form th:action="${client.id != null ? '/clients/' + client.id + '/edit' : '/clients/new'}" 
-                              th:object="${client}" method="post">
-                            
-                            <!-- 客户名称 -->
-                            <div class="mb-3">
-                                <label for="name" class="form-label">
-                                    <i class="bi bi-person"></i> Client Name <span class="text-danger">*</span>
-                                </label>
-                                <input type="text" 
-                                       class="form-control" 
-                                       id="name" 
-                                       th:field="*{name}" 
-                                       placeholder="Enter client name"
-                                       required>
-                                <div class="form-text">The name of the client company or organization</div>
-                            </div>
-
-                            <!-- 联系邮箱 -->
-                            <div class="mb-3">
-                                <label for="email" class="form-label">
-                                    <i class="bi bi-envelope"></i> Email Address
-                                </label>
-                                <input type="email" 
-                                       class="form-control" 
-                                       id="email" 
-                                       th:field="*{email}" 
-                                       placeholder="Enter email address">
-                                <div class="form-text">Contact email for this client (optional)</div>
-                            </div>
-
-                            <!-- 提交按钮 -->
-                            <div class="d-flex justify-content-between">
-                                <a th:href="@{/clients}" class="btn btn-outline-secondary">
-                                    <i class="bi bi-x-circle"></i> Cancel
-                                </a>
-                                <button type="submit" class="btn btn-primary">
-                                    <i class="bi bi-check-circle" th:if="${client.id == null}"></i>
-                                    <i class="bi bi-save" th:if="${client.id != null}"></i>
-                                    <span th:text="${client.id != null ? 'Update Client' : 'Create Client'}">Submit</span>
-                                </button>
-                            </div>
-                        </form>
-                    </div>
+        <!-- Client Form -->
+        <div class="form-container">
+            <form th:action="${client.id != null ? '/clients/' + client.id + '/edit' : '/clients/new'}" 
+                  th:object="${client}" method="post">
+                
+                <!-- Client Name -->
+                <div class="form-group">
+                    <label for="name">
+                        Client Name <span class="required">*</span>
+                    </label>
+                    <input type="text" 
+                           id="name" 
+                           th:field="*{name}" 
+                           placeholder="Please enter client name"
+                           required>
+                    <div class="form-help">Name of the client company or organization</div>
                 </div>
-            </div>
+
+                <!-- Contact Email -->
+                <div class="form-group">
+                    <label for="email">Email Address</label>
+                    <input type="email" 
+                           id="email" 
+                           th:field="*{email}" 
+                           placeholder="Please enter email address">
+                    <div class="form-help">Contact email for this client (optional)</div>
+                </div>
+
+                <!-- Submit Buttons -->
+                <div class="form-actions">
+                    <a th:href="@{/clients}" class="btn btn-cancel">Cancel</a>
+                    <button type="submit" class="btn btn-submit">
+                        <span th:text="${client.id != null ? 'Update Client' : 'Create Client'}">Submit</span>
+                    </button>
+                </div>
+            </form>
         </div>
     </div>
 
-    <!-- 页脚 -->
-    <footer class="bg-light mt-5 py-4">
-        <div class="container text-center">
-            <p class="text-muted mb-0">
-                <i class="bi bi-building"></i> 
-                PB Client Reporting Subscription System - 
-                <small>Beginner Friendly Version</small>
-            </p>
-        </div>
-    </footer>
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Footer -->
+    <div class="footer">
+        <p>PB Client Report Subscription System - Beginner Version</p>
+    </div>
 </body>
 </html>
