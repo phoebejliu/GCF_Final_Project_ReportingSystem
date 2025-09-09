@@ -251,7 +251,6 @@
                                     <th>Frequency</th>
                                     <th>Format</th>
                                     <th>Delivery Method</th>
-                                    <th>Status</th>
                                     <th>Actions</th>
                                 </tr>
                             </thead>
@@ -263,15 +262,17 @@
                                     <td th:text="${subscription.format}">Format</td>
                                     <td th:text="${subscription.deliveryMethod}">Delivery Method</td>
                                     <td>
-                                        <span class="badge bg-success" th:if="${subscription.active}">Active</span>
-                                        <span class="badge bg-secondary" th:unless="${subscription.active}">Inactive</span>
-                                    </td>
-                                    <td>
                                         <div class="btn-group" role="group">
                                             <a th:href="@{/clients/{clientId}/subscriptions/{id}/edit(clientId=${client.id}, id=${subscription.id})}" 
                                                class="btn btn-outline-primary btn-sm">
                                                 <i class="bi bi-pencil"></i> Edit
                                             </a>
+                                            <button type="button" 
+                                                    class="btn btn-outline-danger btn-sm delete-btn"
+                                                    th:data-subscription-id="${subscription.id}"
+                                                    th:data-subscription-type="${subscription.reportType}">
+                                                <i class="bi bi-trash"></i> Delete
+                                            </button>
                                         </div>
                                     </td>
                                 </tr>
@@ -282,6 +283,63 @@
             </div>
         </div>
     </div>
+
+    <!-- 删除确认对话框 -->
+    <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="deleteModalLabel">
+                        <i class="bi bi-exclamation-triangle text-warning"></i> 确认删除
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p>您确定要删除这个订阅吗？</p>
+                    <p><strong>订阅类型：</strong><span id="subscriptionType"></span></p>
+                    <p class="text-danger"><small>此操作无法撤销！</small></p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                        <i class="bi bi-x-circle"></i> 取消
+                    </button>
+                    <form id="deleteForm" method="post" style="display: inline;">
+                        <button type="submit" class="btn btn-danger">
+                            <i class="bi bi-trash"></i> 确认删除
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // 为所有删除按钮添加事件监听器
+            document.querySelectorAll('.delete-btn').forEach(function(button) {
+                button.addEventListener('click', function() {
+                    const subscriptionId = this.getAttribute('data-subscription-id');
+                    const subscriptionType = this.getAttribute('data-subscription-type');
+                    confirmDelete(subscriptionId, subscriptionType);
+                });
+            });
+        });
+
+        function confirmDelete(subscriptionId, subscriptionType) {
+            // 设置订阅类型显示
+            document.getElementById('subscriptionType').textContent = subscriptionType;
+            
+            // 设置删除表单的 action
+            const deleteForm = document.getElementById('deleteForm');
+            const clientId = [[${client.id}]];
+            deleteForm.action = '/clients/' + clientId + '/subscriptions/' + subscriptionId + '/delete';
+            
+            // 显示确认对话框
+            const deleteModal = new bootstrap.Modal(document.getElementById('deleteModal'));
+            deleteModal.show();
+        }
+    </script>
 
     <!-- 页脚 -->
     <footer class="bg-light mt-5 py-4">

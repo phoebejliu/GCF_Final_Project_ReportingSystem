@@ -36,14 +36,6 @@ public class ReportSubscriptionService {
         return subscriptionRepository.findByClientId(clientId);
     }
     
-    /**
-     * 根据客户ID查找活跃的订阅
-     * Find active subscriptions by client ID
-     */
-    @Transactional(readOnly = true)
-    public List<ReportSubscription> findActiveByClientId(Long clientId) {
-        return subscriptionRepository.findByClientIdAndActiveTrue(clientId);
-    }
     
     /**
      * 根据ID查找订阅
@@ -74,14 +66,5 @@ public class ReportSubscriptionService {
         subscriptionRepository.deleteById(id);
     }
     
-    /**
-     * 切换订阅激活状态
-     * Toggle subscription active status
-     */
-    public ReportSubscription toggleActive(Long id) {
-        ReportSubscription subscription = get(id);
-        subscription.setActive(!subscription.isActive());
-        return subscriptionRepository.save(subscription);
-    }
 }
 

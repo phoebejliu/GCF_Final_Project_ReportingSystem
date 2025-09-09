@@ -19,10 +19,5 @@ public interface ReportSubscriptionRepository extends JpaRepository<ReportSubscr
      */
     List<ReportSubscription> findByClientId(Long clientId);
     
-    /**
-     * 根据客户ID查找活跃的订阅
-     * Find active subscriptions by client ID
-     */
-    List<ReportSubscription> findByClientIdAndActiveTrue(Long clientId);
 }
 

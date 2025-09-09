@@ -9,7 +9,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.util.List;
 
 /**
  * Simplified Subscription Controller - Beginner Friendly
@@ -119,20 +118,4 @@ public class SubscriptionController {
         return "redirect:/clients/" + clientId;
     }
     
-    /**
-     * Toggle subscription active status
-     * 切换订阅激活状态
-     */
-    @PostMapping("/{id}/toggle")
-    public String toggleSubscriptionStatus(@PathVariable Long clientId, 
-                                         @PathVariable Long id,
-                                         RedirectAttributes redirectAttributes) {
-        try {
-            subscriptionService.toggleActive(id);
-            redirectAttributes.addFlashAttribute("successMessage", "Subscription status updated successfully!");
-        } catch (Exception e) {
-            redirectAttributes.addFlashAttribute("errorMessage", "Failed to update subscription status: " + e.getMessage());
-        }
-        return "redirect:/clients/" + clientId;
-    }
 }

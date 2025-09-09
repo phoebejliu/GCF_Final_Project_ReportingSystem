@@ -61,9 +61,8 @@ public class DataInitializer implements CommandLineRunner {
         ReportSubscription sub5 = new ReportSubscription(client3, "Margin Call", "Daily", "PDF", "Email");
         subscriptionService.save(sub5);
         
-        // 为客户4创建订阅（非激活状态）
+        // 为客户4创建订阅
         ReportSubscription sub6 = new ReportSubscription(client4, "Trade Confirmation", "Daily", "PDF", "Email");
-        sub6.setActive(false); // 设置为非激活状态
         subscriptionService.save(sub6);
         
         System.out.println("✅ Demo data initialization completed!");

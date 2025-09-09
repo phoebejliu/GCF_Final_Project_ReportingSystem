@@ -2,7 +2,6 @@ package com.phoebe.pbsub.domain;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
 /**
@@ -43,9 +42,6 @@ public class ReportSubscription {
     @Column(name = "delivery_method", nullable = false)
     private String deliveryMethod;
 
-    // 是否激活 - 布尔值
-    @Column(nullable = false)
-    private boolean active = true;
 
     // 构造函数 - 初学者友好的简单构造函数
     public ReportSubscription() {}
@@ -57,7 +53,6 @@ public class ReportSubscription {
         this.frequency = frequency;
         this.format = format;
         this.deliveryMethod = deliveryMethod;
-        this.active = true; // 默认激活
     }
 
     // Getter和Setter方法 - 标准的Java Bean模式
@@ -109,13 +104,6 @@ public class ReportSubscription {
         this.deliveryMethod = deliveryMethod;
     }
 
-    public boolean isActive() {
-        return active;
-    }
-
-    public void setActive(boolean active) {
-        this.active = active;
-    }
 
     // 简单的toString方法 - 用于调试
     @Override
@@ -126,7 +114,6 @@ public class ReportSubscription {
                 ", frequency='" + frequency + '\'' +
                 ", format='" + format + '\'' +
                 ", deliveryMethod='" + deliveryMethod + '\'' +
-                ", active=" + active +
                 '}';
     }
 }
