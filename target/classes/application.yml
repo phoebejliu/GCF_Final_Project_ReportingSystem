@@ -17,10 +17,11 @@ spring:
 spring.h2.console.enabled: true
 spring.h2.console.path: /h2-console
 
-# Swagger UI 配置
+# Swagger UI 配置 - 使用默认路径
 springdoc:
   api-docs:
-    path: /api-docs
+    enabled: true
   swagger-ui:
-    path: /swagger-ui.html
+    enabled: true
+  packages-to-scan: com.phoebe.pbsub.web.api
 

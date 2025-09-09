@@ -1,15 +1,13 @@
 package com.phoebe.pbsub.domain;
 
-import com.phoebe.pbsub.domain.enums.*;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
-import java.util.HashSet;
-import java.util.Set;
-
 /**
- * Report Subscription Entity Class
+ * Simplified Report Subscription Entity - Beginner Friendly
+ * 简化的报告订阅实体 - 初学者友好版本
  */
 @Entity
 @Table(name = "report_subscriptions")
@@ -19,54 +17,50 @@ public class ReportSubscription {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    // 关联到客户 - 多对一关系
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @JoinColumn(name = "client_id", nullable = false)
     @JsonBackReference
     private Client client;
 
-    @NotNull(message = "Report type cannot be empty")
-    @Enumerated(EnumType.STRING)
+    // 报告类型 - 简单字符串，不使用复杂枚举
+    @NotBlank(message = "Report type cannot be empty")
     @Column(name = "report_type", nullable = false)
-    private ReportType reportType;
+    private String reportType;
 
-    @NotNull(message = "Frequency cannot be empty")
-    @Enumerated(EnumType.STRING)
+    // 频率 - 简单字符串
+    @NotBlank(message = "Frequency cannot be empty")
     @Column(nullable = false)
-    private Frequency frequency;
+    private String frequency;
 
-    @NotNull(message = "Format cannot be empty")
-    @Enumerated(EnumType.STRING)
+    // 格式 - 简单字符串
+    @NotBlank(message = "Format cannot be empty")
     @Column(nullable = false)
-    private ReportFormat format;
+    private String format;
 
-    @ElementCollection(fetch = FetchType.EAGER)
-    @Enumerated(EnumType.STRING)
-    @CollectionTable(name = "subscription_delivery_methods", joinColumns = @JoinColumn(name = "subscription_id"))
-    @Column(name = "delivery_method")
-    private Set<DeliveryMethod> deliveryMethods = new HashSet<>();
+    // 发送方式 - 简化为单个字符串
+    @NotBlank(message = "Delivery method cannot be empty")
+    @Column(name = "delivery_method", nullable = false)
+    private String deliveryMethod;
 
-    @Column(name = "override_email")
-    private String overrideEmail;
-
-    @Column(name = "override_ftp_path")
-    private String overrideFtpPath;
-
+    // 是否激活 - 布尔值
     @Column(nullable = false)
     private boolean active = true;
 
-    // Constructors
+    // 构造函数 - 初学者友好的简单构造函数
     public ReportSubscription() {}
 
-    public ReportSubscription(Client client, ReportType reportType, Frequency frequency, 
-                            ReportFormat format, Set<DeliveryMethod> deliveryMethods) {
+    public ReportSubscription(Client client, String reportType, String frequency, 
+                            String format, String deliveryMethod) {
         this.client = client;
         this.reportType = reportType;
         this.frequency = frequency;
         this.format = format;
-        this.deliveryMethods = deliveryMethods != null ? deliveryMethods : new HashSet<>();
+        this.deliveryMethod = deliveryMethod;
+        this.active = true; // 默认激活
     }
 
-    // Getters and Setters
+    // Getter和Setter方法 - 标准的Java Bean模式
     public Long getId() {
         return id;
     }
@@ -83,52 +77,36 @@ public class ReportSubscription {
         this.client = client;
     }
 
-    public ReportType getReportType() {
+    public String getReportType() {
         return reportType;
     }
 
-    public void setReportType(ReportType reportType) {
+    public void setReportType(String reportType) {
         this.reportType = reportType;
     }
 
-    public Frequency getFrequency() {
+    public String getFrequency() {
         return frequency;
     }
 
-    public void setFrequency(Frequency frequency) {
+    public void setFrequency(String frequency) {
         this.frequency = frequency;
     }
 
-    public ReportFormat getFormat() {
+    public String getFormat() {
         return format;
     }
 
-    public void setFormat(ReportFormat format) {
+    public void setFormat(String format) {
         this.format = format;
     }
 
-    public Set<DeliveryMethod> getDeliveryMethods() {
-        return deliveryMethods;
+    public String getDeliveryMethod() {
+        return deliveryMethod;
     }
 
-    public void setDeliveryMethods(Set<DeliveryMethod> deliveryMethods) {
-        this.deliveryMethods = deliveryMethods;
-    }
-
-    public String getOverrideEmail() {
-        return overrideEmail;
-    }
-
-    public void setOverrideEmail(String overrideEmail) {
-        this.overrideEmail = overrideEmail;
-    }
-
-    public String getOverrideFtpPath() {
-        return overrideFtpPath;
-    }
-
-    public void setOverrideFtpPath(String overrideFtpPath) {
-        this.overrideFtpPath = overrideFtpPath;
+    public void setDeliveryMethod(String deliveryMethod) {
+        this.deliveryMethod = deliveryMethod;
     }
 
     public boolean isActive() {
@@ -139,23 +117,15 @@ public class ReportSubscription {
         this.active = active;
     }
 
-    // Helper methods
-    public void addDeliveryMethod(DeliveryMethod method) {
-        this.deliveryMethods.add(method);
-    }
-
-    public void removeDeliveryMethod(DeliveryMethod method) {
-        this.deliveryMethods.remove(method);
-    }
-
+    // 简单的toString方法 - 用于调试
     @Override
     public String toString() {
         return "ReportSubscription{" +
                 "id=" + id +
-                ", reportType=" + reportType +
-                ", frequency=" + frequency +
-                ", format=" + format +
-                ", deliveryMethods=" + deliveryMethods +
+                ", reportType='" + reportType + '\'' +
+                ", frequency='" + frequency + '\'' +
+                ", format='" + format + '\'' +
+                ", deliveryMethod='" + deliveryMethod + '\'' +
                 ", active=" + active +
                 '}';
     }

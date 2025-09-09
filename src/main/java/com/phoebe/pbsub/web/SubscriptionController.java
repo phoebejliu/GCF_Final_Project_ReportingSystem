@@ -2,88 +2,57 @@ package com.phoebe.pbsub.web;
 
 import com.phoebe.pbsub.domain.Client;
 import com.phoebe.pbsub.domain.ReportSubscription;
-import com.phoebe.pbsub.domain.enums.*;
 import com.phoebe.pbsub.service.ClientService;
 import com.phoebe.pbsub.service.ReportSubscriptionService;
-import jakarta.validation.Valid;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.List;
 
 /**
- * Subscription Controller (Thymeleaf)
+ * Simplified Subscription Controller - Beginner Friendly
+ * 简化的订阅控制器 - 初学者友好版本
  */
 @Controller
 @RequestMapping("/clients/{clientId}/subscriptions")
 public class SubscriptionController {
     
-    private final ReportSubscriptionService subscriptionService;
     private final ClientService clientService;
+    private final ReportSubscriptionService subscriptionService;
     
-    public SubscriptionController(ReportSubscriptionService subscriptionService, 
-                                ClientService clientService) {
-        this.subscriptionService = subscriptionService;
+    public SubscriptionController(ClientService clientService, ReportSubscriptionService subscriptionService) {
         this.clientService = clientService;
+        this.subscriptionService = subscriptionService;
     }
     
     /**
-     * Show create subscription form
+     * Show new subscription form
+     * 显示新建订阅表单
      */
     @GetMapping("/new")
-    public String createForm(@PathVariable Long clientId, Model model) {
+    public String showNewSubscriptionForm(@PathVariable Long clientId, Model model) {
         Client client = clientService.get(clientId);
         ReportSubscription subscription = new ReportSubscription();
         subscription.setClient(client);
         
         model.addAttribute("client", client);
         model.addAttribute("subscription", subscription);
-        model.addAttribute("reportTypes", ReportType.values());
-        model.addAttribute("frequencies", Frequency.values());
-        model.addAttribute("formats", ReportFormat.values());
-        model.addAttribute("deliveryMethods", DeliveryMethod.values());
-        
         return "subscription-form";
     }
     
     /**
      * Create new subscription
+     * 创建新订阅
      */
     @PostMapping
-    public String create(@PathVariable Long clientId,
-                        @Valid @ModelAttribute("subscription") ReportSubscription subscription,
-                        BindingResult result,
-                        @RequestParam(value = "deliveryMethods", required = false) String[] deliveryMethodStrings,
-                        RedirectAttributes redirectAttributes,
-                        Model model) {
-        
-        if (result.hasErrors()) {
-            Client client = clientService.get(clientId);
-            model.addAttribute("client", client);
-            model.addAttribute("reportTypes", ReportType.values());
-            model.addAttribute("frequencies", Frequency.values());
-            model.addAttribute("formats", ReportFormat.values());
-            model.addAttribute("deliveryMethods", DeliveryMethod.values());
-            return "subscription-form";
-        }
-        
+    public String createSubscription(@PathVariable Long clientId, 
+                                   @ModelAttribute ReportSubscription subscription,
+                                   RedirectAttributes redirectAttributes) {
         try {
-            // Set client
             Client client = clientService.get(clientId);
             subscription.setClient(client);
-            
-            // Handle delivery methods
-            if (deliveryMethodStrings != null && deliveryMethodStrings.length > 0) {
-                Set<DeliveryMethod> deliveryMethods = new HashSet<>();
-                for (String method : deliveryMethodStrings) {
-                    deliveryMethods.add(DeliveryMethod.valueOf(method));
-                }
-                subscription.setDeliveryMethods(deliveryMethods);
-            }
             
             subscriptionService.save(subscription);
             redirectAttributes.addFlashAttribute("successMessage", "Subscription created successfully!");
@@ -96,79 +65,53 @@ public class SubscriptionController {
     
     /**
      * Show edit subscription form
+     * 显示编辑订阅表单
      */
-    @GetMapping("/{subscriptionId}/edit")
-    public String editForm(@PathVariable Long clientId, 
-                          @PathVariable Long subscriptionId, 
-                          Model model) {
+    @GetMapping("/{id}/edit")
+    public String showEditSubscriptionForm(@PathVariable Long clientId, 
+                                         @PathVariable Long id, 
+                                         Model model) {
         Client client = clientService.get(clientId);
-        ReportSubscription subscription = subscriptionService.get(subscriptionId);
+        ReportSubscription subscription = subscriptionService.get(id);
         
         model.addAttribute("client", client);
         model.addAttribute("subscription", subscription);
-        model.addAttribute("reportTypes", ReportType.values());
-        model.addAttribute("frequencies", Frequency.values());
-        model.addAttribute("formats", ReportFormat.values());
-        model.addAttribute("deliveryMethods", DeliveryMethod.values());
-        
         return "subscription-form";
     }
     
     /**
      * Update subscription
+     * 更新订阅
      */
-    @PostMapping("/{subscriptionId}")
-    public String update(@PathVariable Long clientId,
-                        @PathVariable Long subscriptionId,
-                        @Valid @ModelAttribute("subscription") ReportSubscription subscription,
-                        BindingResult result,
-                        @RequestParam(value = "deliveryMethods", required = false) String[] deliveryMethodStrings,
-                        RedirectAttributes redirectAttributes,
-                        Model model) {
-        
-        if (result.hasErrors()) {
-            Client client = clientService.get(clientId);
-            model.addAttribute("client", client);
-            model.addAttribute("reportTypes", ReportType.values());
-            model.addAttribute("frequencies", Frequency.values());
-            model.addAttribute("formats", ReportFormat.values());
-            model.addAttribute("deliveryMethods", DeliveryMethod.values());
-            return "subscription-form";
-        }
-        
+    @PostMapping("/{id}")
+    public String updateSubscription(@PathVariable Long clientId, 
+                                   @PathVariable Long id,
+                                   @ModelAttribute ReportSubscription subscription,
+                                   RedirectAttributes redirectAttributes) {
         try {
-            // Set ID and client
-            subscription.setId(subscriptionId);
             Client client = clientService.get(clientId);
+            subscription.setId(id);
             subscription.setClient(client);
-            
-            // Handle delivery methods
-            if (deliveryMethodStrings != null && deliveryMethodStrings.length > 0) {
-                Set<DeliveryMethod> deliveryMethods = new HashSet<>();
-                for (String method : deliveryMethodStrings) {
-                    deliveryMethods.add(DeliveryMethod.valueOf(method));
-                }
-                subscription.setDeliveryMethods(deliveryMethods);
-            }
             
             subscriptionService.save(subscription);
             redirectAttributes.addFlashAttribute("successMessage", "Subscription updated successfully!");
             return "redirect:/clients/" + clientId;
         } catch (Exception e) {
             redirectAttributes.addFlashAttribute("errorMessage", "Failed to update subscription: " + e.getMessage());
-            return "redirect:/clients/" + clientId + "/subscriptions/" + subscriptionId + "/edit";
+            return "redirect:/clients/" + clientId + "/subscriptions/" + id + "/edit";
         }
     }
     
     /**
      * Delete subscription
+     * 删除订阅
      */
-    @PostMapping("/{subscriptionId}/delete")
-    public String delete(@PathVariable Long clientId, 
-                        @PathVariable Long subscriptionId, 
-                        RedirectAttributes redirectAttributes) {
+    @PostMapping("/{id}/delete")
+    public String deleteSubscription(@PathVariable Long clientId, 
+                                   @PathVariable Long id,
+                                   RedirectAttributes redirectAttributes) {
         try {
-            subscriptionService.delete(subscriptionId);
+            subscriptionService.delete(id);
             redirectAttributes.addFlashAttribute("successMessage", "Subscription deleted successfully!");
         } catch (Exception e) {
             redirectAttributes.addFlashAttribute("errorMessage", "Failed to delete subscription: " + e.getMessage());
@@ -177,14 +120,15 @@ public class SubscriptionController {
     }
     
     /**
-     * Toggle subscription status (activate/deactivate)
+     * Toggle subscription active status
+     * 切换订阅激活状态
      */
-    @PostMapping("/{subscriptionId}/toggle")
-    public String toggleActive(@PathVariable Long clientId, 
-                              @PathVariable Long subscriptionId, 
-                              RedirectAttributes redirectAttributes) {
+    @PostMapping("/{id}/toggle")
+    public String toggleSubscriptionStatus(@PathVariable Long clientId, 
+                                         @PathVariable Long id,
+                                         RedirectAttributes redirectAttributes) {
         try {
-            subscriptionService.toggleActive(subscriptionId);
+            subscriptionService.toggleActive(id);
             redirectAttributes.addFlashAttribute("successMessage", "Subscription status updated successfully!");
         } catch (Exception e) {
             redirectAttributes.addFlashAttribute("errorMessage", "Failed to update subscription status: " + e.getMessage());

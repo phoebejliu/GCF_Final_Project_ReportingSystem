@@ -83,8 +83,17 @@ public class GlobalExceptionHandler {
     public Object handleGenericException(Exception ex, 
                                         jakarta.servlet.http.HttpServletRequest request, 
                                         Model model) {
+        // Skip handling for Swagger/OpenAPI related requests
+        String requestURI = request.getRequestURI();
+        if (requestURI.startsWith("/swagger-ui") || 
+            requestURI.startsWith("/v3/api-docs") || 
+            requestURI.startsWith("/webjars") ||
+            requestURI.startsWith("/swagger-resources")) {
+            return null; // Let Spring handle it
+        }
+        
         // If it's an API request, return JSON response
-        if (request.getRequestURI().startsWith("/api/")) {
+        if (requestURI.startsWith("/api/")) {
             Map<String, Object> response = new HashMap<>();
             response.put("error", "System Error");
             response.put("message", "An unknown error occurred, please try again later");

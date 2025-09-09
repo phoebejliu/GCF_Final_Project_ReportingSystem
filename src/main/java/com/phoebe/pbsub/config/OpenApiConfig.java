@@ -2,12 +2,11 @@ package com.phoebe.pbsub.config;
 
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Info;
-import io.swagger.v3.oas.models.info.Contact;
-import io.swagger.v3.oas.models.info.License;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 /**
+ * OpenAPI (Swagger) Configuration
  * OpenAPI (Swagger) 配置
  */
 @Configuration
@@ -18,13 +17,7 @@ public class OpenApiConfig {
         return new OpenAPI()
                 .info(new Info()
                         .title("PB Client Reporting Subscription API")
-                        .description("Prime Brokerage 客户报告订阅系统 API 文档")
-                        .version("1.0.0")
-                        .contact(new Contact()
-                                .name("FX Prime Brokerage Team")
-                                .email("pb-team@company.com"))
-                        .license(new License()
-                                .name("MIT License")
-                                .url("https://opensource.org/licenses/MIT")));
+                        .description("PB客户报告订阅系统API文档 - 包含客户管理和订阅管理的完整CRUD操作")
+                        .version("1.0.0"));
     }
 }

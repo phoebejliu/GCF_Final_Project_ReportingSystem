@@ -9,41 +9,40 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Client Entity Class
+ * Simplified Client Entity - Beginner Friendly
+ * 简化的客户实体 - 初学者友好版本
  */
 @Entity
 @Table(name = "clients")
 public class Client {
-    
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    // 客户名称 - 必填字段
     @NotBlank(message = "Client name cannot be empty")
     @Column(nullable = false)
     private String name;
 
+    // 联系邮箱 - 可选字段，但如果有值必须是有效邮箱格式
     @Email(message = "Invalid email format")
-    @Column(name = "primary_contact_email")
-    private String primaryContactEmail;
-
-    @Column(name = "ftp_path")
-    private String ftpPath;
+    @Column(name = "email")
+    private String email;
 
     @OneToMany(mappedBy = "client", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     @JsonManagedReference
     private List<ReportSubscription> subscriptions = new ArrayList<>();
 
-    // Constructors
+    // 构造函数 - 初学者友好的简单构造函数
     public Client() {}
 
-    public Client(String name, String primaryContactEmail, String ftpPath) {
+    public Client(String name, String email) {
         this.name = name;
-        this.primaryContactEmail = primaryContactEmail;
-        this.ftpPath = ftpPath;
+        this.email = email;
     }
 
-    // Getters and Setters
+    // Getter和Setter方法 - 标准的Java Bean模式
     public Long getId() {
         return id;
     }
@@ -60,20 +59,12 @@ public class Client {
         this.name = name;
     }
 
-    public String getPrimaryContactEmail() {
-        return primaryContactEmail;
+    public String getEmail() {
+        return email;
     }
 
-    public void setPrimaryContactEmail(String primaryContactEmail) {
-        this.primaryContactEmail = primaryContactEmail;
-    }
-
-    public String getFtpPath() {
-        return ftpPath;
-    }
-
-    public void setFtpPath(String ftpPath) {
-        this.ftpPath = ftpPath;
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public List<ReportSubscription> getSubscriptions() {
@@ -95,13 +86,13 @@ public class Client {
         subscription.setClient(null);
     }
 
+    // 简单的toString方法 - 用于调试
     @Override
     public String toString() {
         return "Client{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
-                ", primaryContactEmail='" + primaryContactEmail + '\'' +
-                ", ftpPath='" + ftpPath + '\'' +
+                ", email='" + email + '\'' +
                 '}';
     }
 }

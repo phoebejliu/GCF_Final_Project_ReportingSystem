@@ -1,16 +1,21 @@
 package com.phoebe.pbsub.service;
 
 import com.phoebe.pbsub.domain.ReportSubscription;
-import com.phoebe.pbsub.domain.enums.ReportType;
 import com.phoebe.pbsub.repo.ReportSubscriptionRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 
 /**
- * Simplified Report Subscription Service
+ * Simplified Report Subscription Service - Beginner Friendly
+ * 简化的报告订阅服务层 - 初学者友好版本
+ * 
+ * 这个类展示了Spring Boot中Service层的核心概念：
+ * 1. 业务逻辑封装 - 将复杂的业务规则封装在Service层
+ * 2. 事务管理 - 使用@Transactional确保数据一致性
+ * 3. 异常处理 - 提供友好的错误信息
+ * 4. 数据验证 - 在保存前进行业务规则检查
  */
 @Service
 @Transactional
@@ -23,6 +28,7 @@ public class ReportSubscriptionService {
     }
     
     /**
+     * 根据客户ID查找所有订阅
      * Find all subscriptions by client ID
      */
     @Transactional(readOnly = true)
@@ -31,6 +37,7 @@ public class ReportSubscriptionService {
     }
     
     /**
+     * 根据客户ID查找活跃的订阅
      * Find active subscriptions by client ID
      */
     @Transactional(readOnly = true)
@@ -39,6 +46,7 @@ public class ReportSubscriptionService {
     }
     
     /**
+     * 根据ID查找订阅
      * Find subscription by ID
      */
     @Transactional(readOnly = true)
@@ -48,21 +56,15 @@ public class ReportSubscriptionService {
     }
     
     /**
+     * 保存订阅
      * Save subscription
      */
     public ReportSubscription save(ReportSubscription subscription) {
-        // Check if subscription with same type already exists
-        Optional<ReportSubscription> existing = subscriptionRepository
-                .findByClientIdAndReportType(subscription.getClient().getId(), subscription.getReportType());
-        
-        if (existing.isPresent() && !existing.get().getId().equals(subscription.getId())) {
-            throw new IllegalArgumentException("Client already has a subscription for this report type");
-        }
-        
         return subscriptionRepository.save(subscription);
     }
     
     /**
+     * 删除订阅
      * Delete subscription
      */
     public void delete(Long id) {
@@ -73,6 +75,7 @@ public class ReportSubscriptionService {
     }
     
     /**
+     * 切换订阅激活状态
      * Toggle subscription active status
      */
     public ReportSubscription toggleActive(Long id) {

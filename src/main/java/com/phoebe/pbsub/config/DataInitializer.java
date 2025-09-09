@@ -2,16 +2,14 @@ package com.phoebe.pbsub.config;
 
 import com.phoebe.pbsub.domain.Client;
 import com.phoebe.pbsub.domain.ReportSubscription;
-import com.phoebe.pbsub.domain.enums.*;
 import com.phoebe.pbsub.service.ClientService;
 import com.phoebe.pbsub.service.ReportSubscriptionService;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
-import java.util.Set;
-
 /**
- * 数据初始化器 - 用于创建演示数据
+ * Simplified Data Initializer - Beginner Friendly
+ * 简化的数据初始化器 - 初学者友好版本
  */
 @Component
 public class DataInitializer implements CommandLineRunner {
@@ -26,7 +24,7 @@ public class DataInitializer implements CommandLineRunner {
     
     @Override
     public void run(String... args) throws Exception {
-        // Check if data already exists
+        // 检查数据是否已存在
         if (clientService.count() > 0) {
             System.out.println("📊 Database already contains data, skipping initialization");
             return;
@@ -34,75 +32,38 @@ public class DataInitializer implements CommandLineRunner {
         
         System.out.println("🚀 Starting demo data initialization...");
         
-        // Create demo clients
-        Client client1 = new Client("Goldman Sachs Investment Management", "gsim@gs.com", "/ftp/gsim");
-        Client client2 = new Client("JPMorgan Asset Management", "jpmam@jpmorgan.com", "/ftp/jpmam");
-        Client client3 = new Client("BlackRock Funds", "blackrock@blackrock.com", "/ftp/blackrock");
-        Client client4 = new Client("Bridgewater Associates", "bridgewater@bridgewater.com", null);
+        // 创建演示客户 - 使用简化的构造函数
+        Client client1 = new Client("Goldman Sachs Investment Management", "gsim@gs.com");
+        Client client2 = new Client("JPMorgan Asset Management", "jpmam@jpmorgan.com");
+        Client client3 = new Client("BlackRock Funds", "blackrock@blackrock.com");
+        Client client4 = new Client("Bridgewater Associates", "bridgewater@bridgewater.com");
         
         client1 = clientService.save(client1);
         client2 = clientService.save(client2);
         client3 = clientService.save(client3);
         client4 = clientService.save(client4);
         
-        // Create subscriptions for client1
-        ReportSubscription sub1 = new ReportSubscription();
-        sub1.setClient(client1);
-        sub1.setReportType(ReportType.TRADE_CONFIRM);
-        sub1.setFrequency(Frequency.DAILY);
-        sub1.setFormat(ReportFormat.PDF);
-        sub1.setDeliveryMethods(Set.of(DeliveryMethod.EMAIL, DeliveryMethod.FTP));
-        sub1.setActive(true);
+        // 为客户1创建订阅 - 使用简化的字符串字段
+        ReportSubscription sub1 = new ReportSubscription(client1, "Trade Confirmation", "Daily", "PDF", "Email");
         subscriptionService.save(sub1);
         
-        ReportSubscription sub2 = new ReportSubscription();
-        sub2.setClient(client1);
-        sub2.setReportType(ReportType.DAILY_PNL);
-        sub2.setFrequency(Frequency.DAILY);
-        sub2.setFormat(ReportFormat.CSV);
-        sub2.setDeliveryMethods(Set.of(DeliveryMethod.EMAIL));
-        sub2.setActive(true);
+        ReportSubscription sub2 = new ReportSubscription(client1, "Daily P&L", "Daily", "CSV", "Email");
         subscriptionService.save(sub2);
         
-        // Create subscriptions for client2
-        ReportSubscription sub3 = new ReportSubscription();
-        sub3.setClient(client2);
-        sub3.setReportType(ReportType.STATEMENT);
-        sub3.setFrequency(Frequency.MONTHLY);
-        sub3.setFormat(ReportFormat.PDF);
-        sub3.setDeliveryMethods(Set.of(DeliveryMethod.EMAIL, DeliveryMethod.UI));
-        sub3.setActive(true);
+        // 为客户2创建订阅
+        ReportSubscription sub3 = new ReportSubscription(client2, "Monthly Statement", "Monthly", "PDF", "Email");
         subscriptionService.save(sub3);
         
-        ReportSubscription sub4 = new ReportSubscription();
-        sub4.setClient(client2);
-        sub4.setReportType(ReportType.OPTIONS_EXPIRY);
-        sub4.setFrequency(Frequency.WEEKLY);
-        sub4.setFormat(ReportFormat.CSV);
-        sub4.setDeliveryMethods(Set.of(DeliveryMethod.FTP));
-        sub4.setOverrideFtpPath("/custom/jpmam/options");
-        sub4.setActive(true);
+        ReportSubscription sub4 = new ReportSubscription(client2, "Options Expiry", "Weekly", "CSV", "FTP");
         subscriptionService.save(sub4);
         
-        // Create subscriptions for client3
-        ReportSubscription sub5 = new ReportSubscription();
-        sub5.setClient(client3);
-        sub5.setReportType(ReportType.MARGIN_CALL);
-        sub5.setFrequency(Frequency.DAILY);
-        sub5.setFormat(ReportFormat.PDF);
-        sub5.setDeliveryMethods(Set.of(DeliveryMethod.EMAIL, DeliveryMethod.UI));
-        sub5.setOverrideEmail("risk@blackrock.com");
-        sub5.setActive(true);
+        // 为客户3创建订阅
+        ReportSubscription sub5 = new ReportSubscription(client3, "Margin Call", "Daily", "PDF", "Email");
         subscriptionService.save(sub5);
         
-        // Create subscription for client4 (inactive status)
-        ReportSubscription sub6 = new ReportSubscription();
-        sub6.setClient(client4);
-        sub6.setReportType(ReportType.TRADE_CONFIRM);
-        sub6.setFrequency(Frequency.DAILY);
-        sub6.setFormat(ReportFormat.PDF);
-        sub6.setDeliveryMethods(Set.of(DeliveryMethod.EMAIL));
-        sub6.setActive(false);
+        // 为客户4创建订阅（非激活状态）
+        ReportSubscription sub6 = new ReportSubscription(client4, "Trade Confirmation", "Daily", "PDF", "Email");
+        sub6.setActive(false); // 设置为非激活状态
         subscriptionService.save(sub6);
         
         System.out.println("✅ Demo data initialization completed!");

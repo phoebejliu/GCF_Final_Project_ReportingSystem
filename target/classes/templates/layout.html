@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,17 +7,116 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css" rel="stylesheet">
     <style>
+        /* 红色主题配色方案 - 初学者友好 */
+        :root {
+            --primary-red: #dc3545;
+            --light-red: #f8d7da;
+            --dark-red: #721c24;
+            --accent-red: #e74c3c;
+        }
+        
         .navbar-brand {
             font-weight: bold;
+            color: white !important;
         }
+        
+        /* 红色主题导航栏 */
+        .navbar-dark.bg-primary {
+            background-color: var(--primary-red) !important;
+        }
+        
+        /* 红色主题按钮 */
+        .btn-primary {
+            background-color: var(--primary-red);
+            border-color: var(--primary-red);
+        }
+        
+        .btn-primary:hover {
+            background-color: var(--dark-red);
+            border-color: var(--dark-red);
+        }
+        
+        .btn-outline-primary {
+            color: var(--primary-red);
+            border-color: var(--primary-red);
+        }
+        
+        .btn-outline-primary:hover {
+            background-color: var(--primary-red);
+            border-color: var(--primary-red);
+        }
+        
+        /* 红色主题卡片 */
         .card {
-            box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+            box-shadow: 0 0.125rem 0.25rem rgba(220, 53, 69, 0.15);
+            border-left: 4px solid var(--primary-red);
         }
+        
+        .card-header {
+            background-color: var(--light-red);
+            border-bottom: 1px solid var(--primary-red);
+        }
+        
+        /* 红色主题表格 */
         .table th {
-            background-color: #f8f9fa;
+            background-color: var(--light-red);
+            color: var(--dark-red);
+            border-color: var(--primary-red);
         }
+        
+        .table-striped tbody tr:nth-of-type(odd) {
+            background-color: rgba(220, 53, 69, 0.05);
+        }
+        
+        /* 红色主题徽章 */
         .badge {
             font-size: 0.75em;
+        }
+        
+        .badge.bg-success {
+            background-color: var(--primary-red) !important;
+        }
+        
+        /* 红色主题警告框 */
+        .alert-success {
+            background-color: var(--light-red);
+            border-color: var(--primary-red);
+            color: var(--dark-red);
+        }
+        
+        /* 红色主题页脚 */
+        .bg-light {
+            background-color: var(--light-red) !important;
+        }
+        
+        /* 红色主题链接 */
+        a {
+            color: var(--primary-red);
+        }
+        
+        a:hover {
+            color: var(--dark-red);
+        }
+        
+        /* 红色主题表单控件 */
+        .form-control:focus {
+            border-color: var(--primary-red);
+            box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25);
+        }
+        
+        /* 红色主题分页 */
+        .page-link {
+            color: var(--primary-red);
+        }
+        
+        .page-link:hover {
+            color: var(--dark-red);
+            background-color: var(--light-red);
+        }
+        
+        .page-item.active .page-link {
+            background-color: var(--primary-red);
+            border-color: var(--primary-red);
         }
     </style>
 </head>
@@ -35,17 +134,17 @@
                 <ul class="navbar-nav me-auto">
                     <li class="nav-item">
                         <a class="nav-link" th:href="@{/clients}">
-                            <i class="bi bi-people"></i> 客户管理
+                            <i class="bi bi-people"></i> Client Management
                         </a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" th:href="@{/swagger-ui.html}" target="_blank">
-                            <i class="bi bi-book"></i> API 文档
+                            <i class="bi bi-book"></i> API Documentation
                         </a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" th:href="@{/h2-console}" target="_blank">
-                            <i class="bi bi-database"></i> 数据库控制台
+                            <i class="bi bi-database"></i> Database Console
                         </a>
                     </li>
                 </ul>
@@ -69,7 +168,7 @@
         </div>
 
         <!-- 页面内容 -->
-        <div layout:fragment="content">
+        <div th:fragment="content">
             <!-- 这里会被具体页面的内容替换 -->
         </div>
     </div>
@@ -80,7 +179,7 @@
             <p class="text-muted mb-0">
                 <i class="bi bi-building"></i> 
                 PB Client Reporting Subscription System - 
-                <small>FX Prime Brokerage Team</small>
+                <small>Beginner Friendly Version</small>
             </p>
         </div>
     </footer>
