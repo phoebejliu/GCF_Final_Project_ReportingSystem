@@ -1,14 +1,18 @@
 package com.phoebe.pbsub.service;
 
-import com.phoebe.pbsub.domain.ReportSubscription;
-import com.phoebe.pbsub.repo.ReportSubscriptionRepository;
+import com.phoebe.pbsub.entity.ReportSubscription;
+import com.phoebe.pbsub.exception.DuplicateSubscriptionException;
+import com.phoebe.pbsub.exception.SubscriptionNotFoundException;
+import com.phoebe.pbsub.repository.ReportSubscriptionRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 /**
- * Simplified Report Subscription Service - Beginner Friendly
+ * Report Subscription Service
  * 
  * This class demonstrates the core concepts of Service layer in Spring Boot:
  * 1. Business logic encapsulation - encapsulate complex business rules in Service layer
@@ -27,7 +31,15 @@ public class ReportSubscriptionService {
     }
     
     /**
-     * Find all subscriptions
+     * Find all subscriptions with pagination
+     */
+    @Transactional(readOnly = true)
+    public Page<ReportSubscription> findAll(Pageable pageable) {
+        return subscriptionRepository.findAll(pageable);
+    }
+    
+    /**
+     * Find all subscriptions - legacy method for backward compatibility
      */
     @Transactional(readOnly = true)
     public List<ReportSubscription> findAll() {
@@ -35,7 +47,15 @@ public class ReportSubscriptionService {
     }
     
     /**
-     * Find all subscriptions by client ID
+     * Find all subscriptions by client ID with pagination
+     */
+    @Transactional(readOnly = true)
+    public Page<ReportSubscription> findByClientId(Long clientId, Pageable pageable) {
+        return subscriptionRepository.findByClientId(clientId, pageable);
+    }
+    
+    /**
+     * Find all subscriptions by client ID - legacy method for backward compatibility
      */
     @Transactional(readOnly = true)
     public List<ReportSubscription> findByClientId(Long clientId) {
@@ -49,13 +69,24 @@ public class ReportSubscriptionService {
     @Transactional(readOnly = true)
     public ReportSubscription get(Long id) {
         return subscriptionRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Subscription not found, ID: " + id));
+                .orElseThrow(() -> new SubscriptionNotFoundException(id));
     }
     
     /**
-     * Save subscription
+     * Save subscription with business logic validation
      */
     public ReportSubscription save(ReportSubscription subscription) {
+        // Check for duplicate subscription
+        if (subscription.getId() == null) {
+            List<ReportSubscription> existingSubscriptions = subscriptionRepository
+                    .findByClientIdAndReportType(subscription.getClient().getId(), subscription.getReportType());
+            if (!existingSubscriptions.isEmpty()) {
+                throw new DuplicateSubscriptionException(
+                    subscription.getClient().getId(), 
+                    subscription.getReportType()
+                );
+            }
+        }
         return subscriptionRepository.save(subscription);
     }
     
@@ -64,7 +95,7 @@ public class ReportSubscriptionService {
      */
     public void delete(Long id) {
         if (!subscriptionRepository.existsById(id)) {
-            throw new IllegalArgumentException("Subscription not found, ID: " + id);
+            throw new SubscriptionNotFoundException(id);
         }
         subscriptionRepository.deleteById(id);
     }

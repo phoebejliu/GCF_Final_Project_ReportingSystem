@@ -1,14 +1,17 @@
 package com.phoebe.pbsub.service;
 
-import com.phoebe.pbsub.domain.Client;
-import com.phoebe.pbsub.repo.ClientRepository;
+import com.phoebe.pbsub.entity.Client;
+import com.phoebe.pbsub.exception.ClientNotFoundException;
+import com.phoebe.pbsub.repository.ClientRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 /**
- * Simplified Client Service - Beginner Friendly
+ * Client Service
  * 
  * This class demonstrates the basic usage of Service layer in Spring Boot:
  * 1. @Service annotation - tells Spring this is a service component
@@ -27,7 +30,15 @@ public class ClientService {
     }
     
     /**
-     * Find all clients
+     * Find all clients with pagination
+     */
+    @Transactional(readOnly = true)
+    public Page<Client> findAll(Pageable pageable) {
+        return clientRepository.findAll(pageable);
+    }
+    
+    /**
+     * Find all clients - legacy method for backward compatibility
      */
     @Transactional(readOnly = true)
     public List<Client> findAll() {
@@ -40,7 +51,7 @@ public class ClientService {
     @Transactional(readOnly = true)
     public Client get(Long id) {
         return clientRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Client not found, ID: " + id));
+                .orElseThrow(() -> new ClientNotFoundException(id));
     }
     
     /**
@@ -49,7 +60,7 @@ public class ClientService {
     @Transactional(readOnly = true)
     public Client getWithSubscriptions(Long id) {
         return clientRepository.findByIdWithSubscriptions(id)
-                .orElseThrow(() -> new IllegalArgumentException("Client not found, ID: " + id));
+                .orElseThrow(() -> new ClientNotFoundException(id));
     }
     
     /**
@@ -64,13 +75,21 @@ public class ClientService {
      */
     public void delete(Long id) {
         if (!clientRepository.existsById(id)) {
-            throw new IllegalArgumentException("Client not found, ID: " + id);
+            throw new ClientNotFoundException(id);
         }
         clientRepository.deleteById(id);
     }
     
     /**
-     * Search clients by name
+     * Search clients by name with pagination
+     */
+    @Transactional(readOnly = true)
+    public Page<Client> searchByName(String name, Pageable pageable) {
+        return clientRepository.findByNameContainingIgnoreCase(name, pageable);
+    }
+    
+    /**
+     * Search clients by name - legacy method for backward compatibility
      */
     @Transactional(readOnly = true)
     public List<Client> searchByName(String name) {

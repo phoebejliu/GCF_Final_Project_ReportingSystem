@@ -1,6 +1,6 @@
 package com.phoebe.pbsub.web;
 
-import com.phoebe.pbsub.domain.Client;
+import com.phoebe.pbsub.entity.Client;
 import com.phoebe.pbsub.service.ClientService;
 import jakarta.validation.Valid;
 import org.springframework.stereotype.Controller;

@@ -1,0 +1,4 @@
+com/phoebe/pbsub/web/api/ClientApiTest.class
+com/phoebe/pbsub/service/ClientServiceTest.class
+com/phoebe/pbsub/repository/ClientRepositoryTest.class
+com/phoebe/pbsub/service/ReportSubscriptionServiceTest.class

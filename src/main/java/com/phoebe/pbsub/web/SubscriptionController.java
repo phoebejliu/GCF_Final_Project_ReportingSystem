@@ -1,7 +1,7 @@
 package com.phoebe.pbsub.web;
 
-import com.phoebe.pbsub.domain.Client;
-import com.phoebe.pbsub.domain.ReportSubscription;
+import com.phoebe.pbsub.entity.Client;
+import com.phoebe.pbsub.entity.ReportSubscription;
 import com.phoebe.pbsub.service.ClientService;
 import com.phoebe.pbsub.service.ReportSubscriptionService;
 import org.springframework.stereotype.Controller;
@@ -11,7 +11,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 
 /**
- * Simplified Subscription Controller - Beginner Friendly
+ * Subscription Controller
  */
 @Controller
 @RequestMapping("/clients/{clientId}/subscriptions")

@@ -2,254 +2,102 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title th:text="${subscription.id != null ? 'Edit Subscription' : 'Add New Subscription'} + ' - ' + ${client.name}">Subscription Form</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #f5f5f5;
-        }
-        .header {
-            background-color: #333;
-            color: white;
-            padding: 10px 20px;
-        }
-        .header h1 {
-            margin: 0;
-            font-size: 24px;
-        }
-        .nav {
-            background-color: #444;
-            padding: 10px 20px;
-        }
-        .nav a {
-            color: white;
-            text-decoration: none;
-            margin-right: 20px;
-        }
-        .nav a:hover {
-            text-decoration: underline;
-        }
-        .container {
-            max-width: 800px;
-            margin: 20px auto;
-            padding: 0 20px;
-        }
-        .footer {
-            background-color: #333;
-            color: white;
-            text-align: center;
-            padding: 20px;
-            margin-top: 50px;
-        }
-        .alert {
-            padding: 10px;
-            margin: 10px 0;
-            border: 1px solid;
-        }
-        .alert-success {
-            background-color: #d4edda;
-            border-color: #c3e6cb;
-            color: #155724;
-        }
-        .alert-danger {
-            background-color: #f8d7da;
-            border-color: #f5c6cb;
-            color: #721c24;
-        }
-        .page-title {
-            background-color: white;
-            padding: 20px;
-            margin-bottom: 20px;
-            border: 1px solid #ddd;
-        }
-        .page-title h2 {
-            margin: 0 0 10px 0;
-        }
-        .back-button {
-            background-color: #6c757d;
-            color: white;
-            padding: 8px 16px;
-            text-decoration: none;
-            border-radius: 4px;
-            font-size: 14px;
-        }
-        .back-button:hover {
-            background-color: #545b62;
-            color: white;
-            text-decoration: none;
-        }
-        .form-container {
-            background-color: white;
-            padding: 30px;
-            border: 1px solid #ddd;
-        }
-        .form-group {
-            margin-bottom: 20px;
-        }
-        .form-group label {
-            display: block;
-            margin-bottom: 5px;
-            font-weight: bold;
-        }
-        .form-group input,
-        .form-group select {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            font-size: 14px;
-        }
-        .form-group input:focus,
-        .form-group select:focus {
-            outline: none;
-            border-color: #007bff;
-        }
-        .form-help {
-            font-size: 12px;
-            color: #666;
-            margin-top: 5px;
-        }
-        .form-actions {
-            margin-top: 30px;
-            text-align: right;
-        }
-        .btn {
-            padding: 10px 20px;
-            margin-left: 10px;
-            text-decoration: none;
-            border-radius: 4px;
-            border: none;
-            cursor: pointer;
-            font-size: 14px;
-        }
-        .btn-cancel {
-            background-color: #6c757d;
-            color: white;
-        }
-        .btn-submit {
-            background-color: #007bff;
-            color: white;
-        }
-        .btn:hover {
-            opacity: 0.8;
-        }
-        .required {
-            color: red;
-        }
-    </style>
 </head>
 <body>
     <!-- Page Header -->
-    <div class="header">
-        <h1>PB Client Report Subscription System</h1>
-    </div>
+    <h1>PB Client Report Subscription System</h1>
     
     <!-- Navigation -->
-    <div class="nav">
-        <a th:href="@{/clients}">Client Management</a>
-        <a th:href="@{/swagger-ui.html}" target="_blank">API Documentation</a>
+    <p>
+        <a th:href="@{/clients}">Client Management</a> | 
+        <a th:href="@{/swagger-ui.html}" target="_blank">API Documentation</a> | 
         <a th:href="@{/h2-console}" target="_blank">Database Console</a>
+    </p>
+
+    <!-- Messages -->
+    <div th:if="${successMessage}" style="color: green; background-color: #e8f5e8; padding: 10px; border: 1px solid green;">
+        <span th:text="${successMessage}"></span>
+    </div>
+    
+    <div th:if="${errorMessage}" style="color: red; background-color: #ffe8e8; padding: 10px; border: 1px solid red;">
+        <span th:text="${errorMessage}"></span>
     </div>
 
-    <!-- Main Content -->
-    <div class="container">
-        <!-- Message Alerts -->
-        <div th:if="${successMessage}" class="alert alert-success">
-            <span th:text="${successMessage}"></span>
-        </div>
+    <!-- Page Title -->
+    <h2 th:text="${subscription.id != null ? 'Edit Subscription' : 'Add New Subscription'}">Subscription Form</h2>
+    <p th:text="'Client: ' + ${client.name}">Client: Client Name</p>
+    <p><a th:href="@{/clients/{id}(id=${client.id})}">Back to Client Details</a></p>
+
+    <!-- Subscription Form -->
+    <form th:action="${subscription.id != null ? '/clients/' + client.id + '/subscriptions/' + subscription.id : '/clients/' + client.id + '/subscriptions'}" 
+          th:object="${subscription}" method="post">
         
-        <div th:if="${errorMessage}" class="alert alert-danger">
-            <span th:text="${errorMessage}"></span>
-        </div>
+        <!-- Report Type -->
+        <p>
+            <label for="reportType">Report Type <span style="color: red;">*</span></label><br>
+            <select id="reportType" th:field="*{reportType}" required style="width: 300px; padding: 5px;">
+                <option value="">Please select report type</option>
+                <option value="TRADE_CONFIRM">Trade Confirmation</option>
+                <option value="OPTIONS_EXPIRY">Options Expiry</option>
+                <option value="MARGIN_CALL">Margin Call</option>
+                <option value="STATEMENT">Account Statement</option>
+                <option value="DAILY_PNL">Daily P&L</option>
+            </select>
+            <br><small>Type of report to be generated</small>
+        </p>
 
-        <!-- Page Title -->
-        <div class="page-title">
-            <h2 th:text="${subscription.id != null ? 'Edit Subscription' : 'Add New Subscription'}">Subscription Form</h2>
-            <p th:text="'Client: ' + ${client.name}">Client: Client Name</p>
-            <a th:href="@{/clients/{id}(id=${client.id})}" class="back-button">Back to Client Details</a>
-        </div>
+        <!-- Frequency -->
+        <p>
+            <label for="frequency">Frequency <span style="color: red;">*</span></label><br>
+            <select id="frequency" th:field="*{frequency}" required style="width: 300px; padding: 5px;">
+                <option value="">Please select frequency</option>
+                <option value="Daily">Daily</option>
+                <option value="Weekly">Weekly</option>
+                <option value="Monthly">Monthly</option>
+                <option value="Quarterly">Quarterly</option>
+                <option value="Yearly">Yearly</option>
+            </select>
+            <br><small>Frequency of report generation</small>
+        </p>
 
-        <!-- Subscription Form -->
-        <div class="form-container">
-            <form th:action="${subscription.id != null ? '/clients/' + client.id + '/subscriptions/' + subscription.id : '/clients/' + client.id + '/subscriptions'}" 
-                  th:object="${subscription}" method="post">
-                
-                <!-- Report Type -->
-                <div class="form-group">
-                    <label for="reportType">
-                        Report Type <span class="required">*</span>
-                    </label>
-                    <input type="text" 
-                           id="reportType" 
-                           th:field="*{reportType}" 
-                           placeholder="e.g.: Daily P&L, Trade Confirmation, Monthly Report"
-                           required>
-                    <div class="form-help">Type of report to be generated</div>
-                </div>
+        <!-- Format -->
+        <p>
+            <label for="format">Format <span style="color: red;">*</span></label><br>
+            <select id="format" th:field="*{format}" required style="width: 300px; padding: 5px;">
+                <option value="">Please select format</option>
+                <option value="PDF">PDF</option>
+                <option value="CSV">CSV</option>
+                <option value="Excel">Excel</option>
+                <option value="XML">XML</option>
+            </select>
+            <br><small>File format of the report</small>
+        </p>
 
-                <!-- Frequency -->
-                <div class="form-group">
-                    <label for="frequency">
-                        Frequency <span class="required">*</span>
-                    </label>
-                    <select id="frequency" th:field="*{frequency}" required>
-                        <option value="">Please select frequency</option>
-                        <option value="Daily">Daily</option>
-                        <option value="Weekly">Weekly</option>
-                        <option value="Monthly">Monthly</option>
-                        <option value="Quarterly">Quarterly</option>
-                        <option value="Yearly">Yearly</option>
-                    </select>
-                    <div class="form-help">Frequency of report generation</div>
-                </div>
+        <!-- Delivery Method -->
+        <p>
+            <label for="deliveryMethod">Delivery Method <span style="color: red;">*</span></label><br>
+            <select id="deliveryMethod" th:field="*{deliveryMethod}" required style="width: 300px; padding: 5px;">
+                <option value="">Please select delivery method</option>
+                <option value="Email">Email</option>
+                <option value="FTP">FTP</option>
+                <option value="SFTP">SFTP</option>
+                <option value="API">API</option>
+            </select>
+            <br><small>Method of report delivery</small>
+        </p>
 
-                <!-- Format -->
-                <div class="form-group">
-                    <label for="format">
-                        Format <span class="required">*</span>
-                    </label>
-                    <select id="format" th:field="*{format}" required>
-                        <option value="">Please select format</option>
-                        <option value="PDF">PDF</option>
-                        <option value="CSV">CSV</option>
-                        <option value="Excel">Excel</option>
-                        <option value="XML">XML</option>
-                    </select>
-                    <div class="form-help">File format of the report</div>
-                </div>
-
-                <!-- Delivery Method -->
-                <div class="form-group">
-                    <label for="deliveryMethod">
-                        Delivery Method <span class="required">*</span>
-                    </label>
-                    <select id="deliveryMethod" th:field="*{deliveryMethod}" required>
-                        <option value="">Please select delivery method</option>
-                        <option value="Email">Email</option>
-                        <option value="FTP">FTP</option>
-                        <option value="SFTP">SFTP</option>
-                        <option value="API">API</option>
-                    </select>
-                    <div class="form-help">Method of report delivery</div>
-                </div>
-
-                <!-- Submit Buttons -->
-                <div class="form-actions">
-                    <a th:href="@{/clients/{id}(id=${client.id})}" class="btn btn-cancel">Cancel</a>
-                    <button type="submit" class="btn btn-submit">
-                        <span th:text="${subscription.id != null ? 'Update Subscription' : 'Create Subscription'}">Submit</span>
-                    </button>
-                </div>
-            </form>
-        </div>
-    </div>
+        <!-- Submit Buttons -->
+        <p>
+            <a th:href="@{/clients/{id}(id=${client.id})}">Cancel</a> | 
+            <button type="submit">
+                <span th:text="${subscription.id != null ? 'Update Subscription' : 'Create Subscription'}">Submit</span>
+            </button>
+        </p>
+    </form>
 
     <!-- Footer -->
-    <div class="footer">
-        <p>PB Client Report Subscription System - Beginner Version</p>
-    </div>
+    <hr>
+    <p><small>PB Client Report Subscription System</small></p>
 </body>
 </html>

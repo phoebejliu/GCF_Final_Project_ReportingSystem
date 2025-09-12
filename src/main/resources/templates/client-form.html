@@ -2,216 +2,71 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title th:text="${client.id != null ? 'Edit Client' : 'Add New Client'} + ' - PB Client Report Subscription System'">Client Form</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #f5f5f5;
-        }
-        .header {
-            background-color: #333;
-            color: white;
-            padding: 10px 20px;
-        }
-        .header h1 {
-            margin: 0;
-            font-size: 24px;
-        }
-        .nav {
-            background-color: #444;
-            padding: 10px 20px;
-        }
-        .nav a {
-            color: white;
-            text-decoration: none;
-            margin-right: 20px;
-        }
-        .nav a:hover {
-            text-decoration: underline;
-        }
-        .container {
-            max-width: 800px;
-            margin: 20px auto;
-            padding: 0 20px;
-        }
-        .footer {
-            background-color: #333;
-            color: white;
-            text-align: center;
-            padding: 20px;
-            margin-top: 50px;
-        }
-        .alert {
-            padding: 10px;
-            margin: 10px 0;
-            border: 1px solid;
-        }
-        .alert-success {
-            background-color: #d4edda;
-            border-color: #c3e6cb;
-            color: #155724;
-        }
-        .alert-danger {
-            background-color: #f8d7da;
-            border-color: #f5c6cb;
-            color: #721c24;
-        }
-        .page-title {
-            background-color: white;
-            padding: 20px;
-            margin-bottom: 20px;
-            border: 1px solid #ddd;
-        }
-        .page-title h2 {
-            margin: 0 0 10px 0;
-        }
-        .back-button {
-            background-color: #6c757d;
-            color: white;
-            padding: 8px 16px;
-            text-decoration: none;
-            border-radius: 4px;
-            font-size: 14px;
-        }
-        .back-button:hover {
-            background-color: #545b62;
-            color: white;
-            text-decoration: none;
-        }
-        .form-container {
-            background-color: white;
-            padding: 30px;
-            border: 1px solid #ddd;
-        }
-        .form-group {
-            margin-bottom: 20px;
-        }
-        .form-group label {
-            display: block;
-            margin-bottom: 5px;
-            font-weight: bold;
-        }
-        .form-group input {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            font-size: 14px;
-        }
-        .form-group input:focus {
-            outline: none;
-            border-color: #007bff;
-        }
-        .form-help {
-            font-size: 12px;
-            color: #666;
-            margin-top: 5px;
-        }
-        .form-actions {
-            margin-top: 30px;
-            text-align: right;
-        }
-        .btn {
-            padding: 10px 20px;
-            margin-left: 10px;
-            text-decoration: none;
-            border-radius: 4px;
-            border: none;
-            cursor: pointer;
-            font-size: 14px;
-        }
-        .btn-cancel {
-            background-color: #6c757d;
-            color: white;
-        }
-        .btn-submit {
-            background-color: #007bff;
-            color: white;
-        }
-        .btn:hover {
-            opacity: 0.8;
-        }
-        .required {
-            color: red;
-        }
-    </style>
 </head>
 <body>
     <!-- Page Header -->
-    <div class="header">
-        <h1>PB Client Report Subscription System</h1>
-    </div>
+    <h1>PB Client Report Subscription System</h1>
     
     <!-- Navigation -->
-    <div class="nav">
-        <a th:href="@{/clients}">Client Management</a>
-        <a th:href="@{/swagger-ui.html}" target="_blank">API Documentation</a>
+    <p>
+        <a th:href="@{/clients}">Client Management</a> | 
+        <a th:href="@{/swagger-ui.html}" target="_blank">API Documentation</a> | 
         <a th:href="@{/h2-console}" target="_blank">Database Console</a>
+    </p>
+
+    <!-- Messages -->
+    <div th:if="${successMessage}" style="color: green; background-color: #e8f5e8; padding: 10px; border: 1px solid green;">
+        <span th:text="${successMessage}"></span>
+    </div>
+    
+    <div th:if="${errorMessage}" style="color: red; background-color: #ffe8e8; padding: 10px; border: 1px solid red;">
+        <span th:text="${errorMessage}"></span>
     </div>
 
-    <!-- Main Content -->
-    <div class="container">
-        <!-- Message Alerts -->
-        <div th:if="${successMessage}" class="alert alert-success">
-            <span th:text="${successMessage}"></span>
-        </div>
+    <!-- Page Title -->
+    <h2 th:text="${client.id != null ? 'Edit Client' : 'Add New Client'}">Client Form</h2>
+    <p>Create or update client information</p>
+    <p><a th:href="@{/clients}">Back to Client List</a></p>
+
+    <!-- Client Form -->
+    <form th:action="${client.id != null ? '/clients/' + client.id + '/edit' : '/clients/new'}" 
+          th:object="${client}" method="post">
         
-        <div th:if="${errorMessage}" class="alert alert-danger">
-            <span th:text="${errorMessage}"></span>
-        </div>
+        <!-- Client Name -->
+        <p>
+            <label for="name">Client Name <span style="color: red;">*</span></label><br>
+            <input type="text" 
+                   id="name" 
+                   th:field="*{name}" 
+                   placeholder="Enter client name"
+                   required
+                   style="width: 300px; padding: 5px;">
+            <br><small>Name of the client company or organization</small>
+        </p>
 
-        <!-- Page Title -->
-        <div class="page-title">
-            <h2 th:text="${client.id != null ? 'Edit Client' : 'Add New Client'}">Client Form</h2>
-            <p>Create or update client information</p>
-            <a th:href="@{/clients}" class="back-button">Back to Client List</a>
-        </div>
+        <!-- Email -->
+        <p>
+            <label for="email">Email Address</label><br>
+            <input type="email" 
+                   id="email" 
+                   th:field="*{email}" 
+                   placeholder="Enter email address"
+                   style="width: 300px; padding: 5px;">
+            <br><small>Contact email for this client (optional)</small>
+        </p>
 
-        <!-- Client Form -->
-        <div class="form-container">
-            <form th:action="${client.id != null ? '/clients/' + client.id + '/edit' : '/clients/new'}" 
-                  th:object="${client}" method="post">
-                
-                <!-- Client Name -->
-                <div class="form-group">
-                    <label for="name">
-                        Client Name <span class="required">*</span>
-                    </label>
-                    <input type="text" 
-                           id="name" 
-                           th:field="*{name}" 
-                           placeholder="Please enter client name"
-                           required>
-                    <div class="form-help">Name of the client company or organization</div>
-                </div>
-
-                <!-- Contact Email -->
-                <div class="form-group">
-                    <label for="email">Email Address</label>
-                    <input type="email" 
-                           id="email" 
-                           th:field="*{email}" 
-                           placeholder="Please enter email address">
-                    <div class="form-help">Contact email for this client (optional)</div>
-                </div>
-
-                <!-- Submit Buttons -->
-                <div class="form-actions">
-                    <a th:href="@{/clients}" class="btn btn-cancel">Cancel</a>
-                    <button type="submit" class="btn btn-submit">
-                        <span th:text="${client.id != null ? 'Update Client' : 'Create Client'}">Submit</span>
-                    </button>
-                </div>
-            </form>
-        </div>
-    </div>
+        <!-- Submit Buttons -->
+        <p>
+            <a th:href="@{/clients}">Cancel</a> | 
+            <button type="submit">
+                <span th:text="${client.id != null ? 'Update Client' : 'Create Client'}">Submit</span>
+            </button>
+        </p>
+    </form>
 
     <!-- Footer -->
-    <div class="footer">
-        <p>PB Client Report Subscription System - Beginner Version</p>
-    </div>
+    <hr>
+    <p><small>PB Client Report Subscription System</small></p>
 </body>
 </html>

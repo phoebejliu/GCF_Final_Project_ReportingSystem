@@ -2,98 +2,35 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title th:text="${title} ?: 'PB Client Report Subscription System'">PB Client Report Subscription System</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #f5f5f5;
-        }
-        .header {
-            background-color: #333;
-            color: white;
-            padding: 10px 20px;
-        }
-        .header h1 {
-            margin: 0;
-            font-size: 24px;
-        }
-        .nav {
-            background-color: #444;
-            padding: 10px 20px;
-        }
-        .nav a {
-            color: white;
-            text-decoration: none;
-            margin-right: 20px;
-        }
-        .nav a:hover {
-            text-decoration: underline;
-        }
-        .container {
-            max-width: 1200px;
-            margin: 20px auto;
-            padding: 0 20px;
-        }
-        .footer {
-            background-color: #333;
-            color: white;
-            text-align: center;
-            padding: 20px;
-            margin-top: 50px;
-        }
-        .alert {
-            padding: 10px;
-            margin: 10px 0;
-            border: 1px solid;
-        }
-        .alert-success {
-            background-color: #d4edda;
-            border-color: #c3e6cb;
-            color: #155724;
-        }
-        .alert-danger {
-            background-color: #f8d7da;
-            border-color: #f5c6cb;
-            color: #721c24;
-        }
-    </style>
 </head>
 <body>
     <!-- Page Header -->
-    <div class="header">
-        <h1>PB Client Report Subscription System</h1>
-    </div>
+    <h1>PB Client Report Subscription System</h1>
     
     <!-- Navigation -->
-    <div class="nav">
-        <a th:href="@{/clients}">Client Management</a>
-        <a th:href="@{/swagger-ui.html}" target="_blank">API Documentation</a>
+    <p>
+        <a th:href="@{/clients}">Client Management</a> | 
+        <a th:href="@{/swagger-ui.html}" target="_blank">API Documentation</a> | 
         <a th:href="@{/h2-console}" target="_blank">Database Console</a>
+    </p>
+
+    <!-- Messages -->
+    <div th:if="${successMessage}" style="color: green; background-color: #e8f5e8; padding: 10px; border: 1px solid green;">
+        <span th:text="${successMessage}"></span>
+    </div>
+    
+    <div th:if="${errorMessage}" style="color: red; background-color: #ffe8e8; padding: 10px; border: 1px solid red;">
+        <span th:text="${errorMessage}"></span>
     </div>
 
-    <!-- Main Content -->
-    <div class="container">
-        <!-- Message Alerts -->
-        <div th:if="${successMessage}" class="alert alert-success">
-            <span th:text="${successMessage}"></span>
-        </div>
-        
-        <div th:if="${errorMessage}" class="alert alert-danger">
-            <span th:text="${errorMessage}"></span>
-        </div>
-
-        <!-- Page Content -->
-        <div th:fragment="content">
-            <!-- Content will be replaced by specific page content -->
-        </div>
+    <!-- Content -->
+    <div th:fragment="content">
+        <!-- Page content goes here -->
     </div>
 
     <!-- Footer -->
-    <div class="footer">
-        <p>PB Client Report Subscription System - Beginner Version</p>
-    </div>
+    <hr>
+    <p><small>PB Client Report Subscription System</small></p>
 </body>
 </html>
