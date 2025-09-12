@@ -79,6 +79,23 @@ public class ClientApi {
         @ApiResponse(responseCode = "201", description = "Client created successfully"),
         @ApiResponse(responseCode = "400", description = "Invalid input data")
     })
+    @io.swagger.v3.oas.annotations.parameters.RequestBody(
+        description = "Client data",
+        content = @io.swagger.v3.oas.annotations.media.Content(
+            mediaType = "application/json",
+            examples = @io.swagger.v3.oas.annotations.media.ExampleObject(
+                name = "Create client example",
+                summary = "Example of creating a new client",
+                description = "Client information with name and email",
+                value = """
+                {
+                  "name": "Morgan Stanley Investment Management",
+                  "email": "msim@morganstanley.com"
+                }
+                """
+            )
+        )
+    )
     public ResponseEntity<Client> createClient(
             @Parameter(description = "Client data") @Valid @RequestBody Client client) {
         Client savedClient = clientService.save(client);
@@ -89,8 +106,31 @@ public class ClientApi {
      * Update client information
      */
     @PutMapping("/{id}")
+    @Operation(summary = "Update client information", description = "Update an existing client's information")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Client updated successfully"),
+        @ApiResponse(responseCode = "404", description = "Client not found"),
+        @ApiResponse(responseCode = "400", description = "Invalid input data")
+    })
+    @io.swagger.v3.oas.annotations.parameters.RequestBody(
+        description = "Updated client data",
+        content = @io.swagger.v3.oas.annotations.media.Content(
+            mediaType = "application/json",
+            examples = @io.swagger.v3.oas.annotations.media.ExampleObject(
+                name = "Update client example",
+                summary = "Example of updating client information",
+                description = "Updated client information",
+                value = """
+                {
+                  "name": "Goldman Sachs Investment Management",
+                  "email": "gsim@gs.com"
+                }
+                """
+            )
+        )
+    )
     public ResponseEntity<Client> updateClient(
-            @PathVariable Long id,
+            @Parameter(description = "Client ID") @PathVariable Long id,
             @Valid @RequestBody Client client) {
         client.setId(id);
         Client updatedClient = clientService.save(client);

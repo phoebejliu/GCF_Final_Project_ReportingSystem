@@ -85,6 +85,26 @@ public class SubscriptionApi {
         @ApiResponse(responseCode = "400", description = "Invalid input data"),
         @ApiResponse(responseCode = "409", description = "Duplicate subscription")
     })
+    @io.swagger.v3.oas.annotations.parameters.RequestBody(
+        description = "Subscription request data",
+        content = @io.swagger.v3.oas.annotations.media.Content(
+            mediaType = "application/json",
+            examples = @io.swagger.v3.oas.annotations.media.ExampleObject(
+                name = "Create subscription example",
+                summary = "Example of creating a new subscription",
+                description = "Subscription request with client ID and subscription details",
+                value = """
+                {
+                  "clientId": 1,
+                  "reportType": "TRADE_CONFIRM",
+                  "frequency": "DAILY",
+                  "format": "PDF",
+                  "deliveryMethod": "EMAIL"
+                }
+                """
+            )
+        )
+    )
     public ResponseEntity<ReportSubscription> createSubscription(
             @Parameter(description = "Subscription data") @Valid @RequestBody ReportSubscriptionRequest request) {
         
@@ -104,8 +124,39 @@ public class SubscriptionApi {
      * Update subscription
      */
     @PutMapping("/{id}")
+    @Operation(summary = "Update subscription", description = "Update an existing report subscription")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Subscription updated successfully"),
+        @ApiResponse(responseCode = "404", description = "Subscription not found"),
+        @ApiResponse(responseCode = "400", description = "Invalid input data")
+    })
+    @io.swagger.v3.oas.annotations.parameters.RequestBody(
+        description = "Subscription data with complete client information",
+        content = @io.swagger.v3.oas.annotations.media.Content(
+            mediaType = "application/json",
+            examples = @io.swagger.v3.oas.annotations.media.ExampleObject(
+                name = "Update subscription example",
+                summary = "Example of updating a subscription",
+                description = "Complete subscription object with client information",
+                value = """
+                {
+                  "id": 1,
+                  "client": {
+                    "id": 1,
+                    "name": "Goldman Sachs Investment Management",
+                    "email": "gsim@gs.com"
+                  },
+                  "reportType": "TRADE_CONFIRM",
+                  "frequency": "WEEKLY",
+                  "format": "CSV",
+                  "deliveryMethod": "FTP"
+                }
+                """
+            )
+        )
+    )
     public ResponseEntity<ReportSubscription> updateSubscription(
-            @PathVariable Long id,
+            @Parameter(description = "Subscription ID") @PathVariable Long id,
             @Valid @RequestBody ReportSubscription subscription) {
         subscription.setId(id);
         ReportSubscription updatedSubscription = subscriptionService.save(subscription);
