@@ -16,7 +16,6 @@ public class OpenApiConfig {
         return new OpenAPI()
                 .info(new Info()
                         .title("PB Client Reporting Subscription API")
-                        .description("PB Client Report Subscription System API Documentation - Complete CRUD operations for client and subscription management")
                         .version("1.0.0"));
     }
 }
