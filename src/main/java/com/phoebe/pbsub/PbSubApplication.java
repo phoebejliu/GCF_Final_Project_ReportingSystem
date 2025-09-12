@@ -23,13 +23,11 @@ public class PbSubApplication {
             "║    ✅ Application started successfully!                      ║\n" +
             "║                                                              ║\n" +
             "║    📱 Web Interface: http://localhost:8080/clients           ║\n" +
-            "║    📚 API Documentation: http://localhost:8080/swagger-ui.html ║\n" +
-            "║    🗄️  Database Console: http://localhost:8080/h2-console    ║\n" +
             "║                                                              ║\n" +
             "║    🎯 Features:                                              ║\n" +
             "║    • Client Management (CRUD)                                ║\n" +
             "║    • Report Subscription Management                          ║\n" +
-            "║    • REST API + Swagger Documentation                        ║\n" +
+            "║    • REST API Documentation                                  ║\n" +
             "║    • Data Validation & Exception Handling                    ║\n" +
             "║                                                              ║\n" +
             "║    💡 Tech Stack: Spring Boot 3.5.4 + JPA + Thymeleaf + H2   ║\n" +
